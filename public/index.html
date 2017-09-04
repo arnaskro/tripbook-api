@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tripbook API</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet">
+  <style>
+    body {
+      display: block;
+      background-color: #2a304a;
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      display: block;
+      position: fixed;
+      top: 40%;
+      -webkit-transform: translateY(-50%);
+      -moz-transform: translateY(-50%);
+      -o-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+      width: 100%;
+      text-align: center;
+      font-size: 3em;
+      color: #ffffff;
+    }
+
+    #particles {
+      height: 100vh;
+      width: 100vw;
+      display: block;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div id="particles"></div>
+  <h1>Tripbook API</h1>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script type="text/javascript">
+    particlesJS.load('particles', '/particles.json', function() {
+      console.log('Ready!');
+    });
+  </script>
+</body>
+</html>
