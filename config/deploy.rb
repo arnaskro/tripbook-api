@@ -1,7 +1,7 @@
 server '188.166.94.245', port: 22, roles: [:web, :app, :db], primary: true
 
 set :repo_url,        'git@github.com:arnaskro/tripbook-api.git'
-set :application,     'tribook-api'
+set :application,     'tripbook-api'
 set :user,            'deploy'
 set :puma_threads,    [4, 16]
 set :puma_workers,    0
