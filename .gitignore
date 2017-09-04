@@ -1,0 +1,6 @@
+# General
+.vagrant/
+
+# Log files
+*.logs
+*.log
