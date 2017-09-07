@@ -4,6 +4,7 @@ rvm:
 
 before_script:
   - bundle install
+  - rake db:create
 
 script: 
   - bundle exec rake cucumber
