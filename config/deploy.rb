@@ -18,7 +18,7 @@ set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
 set :puma_access_log, "#{release_path}/log/puma.error.log"
 set :puma_error_log,  "#{release_path}/log/puma.access.log"
-set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(config/id_tripbook_deploy_rsa) }
+set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: (File.exist?("config/id_tripbook_deploy_rsa") ? %w(config/id_tripbook_deploy_rsa) : %w(~/.ssh/id_rsa)) }
 
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
@@ -70,7 +70,7 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      invoke 'puma:restart'
+      invoke!('puma:restart')
     end
   end
 
