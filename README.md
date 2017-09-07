@@ -1,2 +1,2 @@
-# Official Tripbook API
+# Official Tripbook API [![Build Status](https://travis-ci.com/arnaskro/tripbook-api.svg?token=2t6mwgyu3pSV3TnSKXGb&branch=master)](https://travis-ci.com/arnaskro/tripbook-api)
 Hello, this is the official repository for the Tribook API
