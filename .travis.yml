@@ -6,4 +6,5 @@ before_script:
   - bundle install
 
 script: 
-  - bundle exec cucumber
+  - bundle exec rake cucumber
+  - bundle exec rake test
