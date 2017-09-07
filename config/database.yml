@@ -15,7 +15,7 @@ development:
   username: postgres
   password: postgres
 
-test: &TEST
+test: &test
   <<: *default
   database: project_test
   username: postgres
@@ -26,3 +26,6 @@ production:
   database: project_production
   username: postgres
   password: postgres
+
+cucumber:
+  <<: *test
