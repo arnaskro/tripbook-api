@@ -28,6 +28,7 @@ group :development, :test do
   # Testing
   gem 'rspec'
   gem 'rspec-rails', '~> 3.6'
+  gem 'rspec-collection_matchers'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # database_cleaner is not required, but highly recommended
