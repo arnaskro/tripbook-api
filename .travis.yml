@@ -18,9 +18,8 @@ env:
 
 after_success:
   - openssl aes-256-cbc -k $DEPLOY_KEY -in config/id_tripbook_deploy_rsa_enc_travis -d -a -out config/id_tripbook_deploy_rsa
-  - "[[ $TRAVIS_BRANCH = 'master' ]] && bundle exec cap production deploy"
+  - "$TRAVIS_BRANCH == 'master' && bundle exec cap production deploy"
 
 branches:
   only:
     - master
-    - dev
