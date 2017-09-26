@@ -7,8 +7,7 @@ before_script:
   - rake db:drop db:create
 
 script: 
-  - bundle exec rake cucumber
-  - bundle exec rake test
+  - bundle exec rspec
 
 notifications:
   email:
