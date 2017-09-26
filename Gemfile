@@ -19,20 +19,21 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
 gem 'active_model_serializers', '~> 0.10.0'
 
 group :development, :test do
+  # Testing
+  gem 'rspec'
+  gem 'rspec-rails', '~> 3.6'
+  gem 'rspec-collection_matchers'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'cucumber-rails', :require => false
   # database_cleaner is not required, but highly recommended
   gem 'database_cleaner'
+  gem 'factory_girl_rails'
 end
 
 group :development do
@@ -51,3 +52,11 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+# -- Authentication 
+# https://github.com/plataformatec/devise
+gem 'devise'
+# https://github.com/lynndylanhurley/devise_token_auth
+gem 'devise_token_auth'
+# https://github.com/omniauth/omniauth
+gem 'omniauth'
