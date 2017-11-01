@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :city do
-    name "MyString"
-    country_id 1
-    latitude "9.99"
-    longitude "9.99"
+    name "Horsens"
+    country_id 59
+    latitude "55.8606"
+    longitude "9.85034"
   end
 end

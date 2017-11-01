@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :country do
-    name "MyString"
-    key "MyString"
-    capital "MyString"
+    name "Denmark"
+    key "DK"
+    capital "Copenhagen"
   end
 end
