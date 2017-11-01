@@ -1,0 +1,5 @@
+class AddCapitalCityToCountries < ActiveRecord::Migration[5.1]
+  def change
+    add_column :countries, :capital_city_id, :integer
+  end
+end
