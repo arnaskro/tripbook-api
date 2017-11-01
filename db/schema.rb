@@ -18,8 +18,8 @@ ActiveRecord::Schema.define(version: 20171101011309) do
   create_table "cities", force: :cascade do |t|
     t.string "name"
     t.integer "country_id"
-    t.decimal "latitude", precision: 15, scale: 13
-    t.decimal "longitude", precision: 15, scale: 13
+    t.decimal "latitude", precision: 15, scale: 6
+    t.decimal "longitude", precision: 15, scale: 6
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
