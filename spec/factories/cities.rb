@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :city do
     name "Horsens"
     country_id 59

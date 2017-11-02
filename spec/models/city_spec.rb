@@ -12,4 +12,11 @@ RSpec.describe City, type: :model do
   it "is invalid without country" do
     expect(City.new(name: "Horsens", latitude: 55.89, longitude: 9.87)).to be_invalid
   end
+  
+  it "is searchable by case insenstive query" do
+    create(:country, id: 59)
+    create(:city)
+    expect(City.search("hor").length > 0).to be true
+  end
+
 end
