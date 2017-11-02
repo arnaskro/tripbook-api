@@ -1,0 +1,2 @@
+class CountrySerializer < AreaSerializer
+end
