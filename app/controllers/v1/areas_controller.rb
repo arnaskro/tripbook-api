@@ -19,9 +19,19 @@ class V1::AreasController < ApplicationController
   def get
     case params[:type].downcase
     when 'country'
-      render json: CountrySerializer.new(Country.find(params[:id])).to_json
+      country = Country.where(id: params[:id]).first
+      if !country.nil?
+        render json: country
+      else
+        render json: {}, status: :not_found
+      end
     when 'city'
-      render json: CitySerializer.new(City.find(params[:id])).to_json
+      city = City.where(id: params[:id]).first
+      if !city.nil?
+        render json: city
+      else
+        render json: {}, status: :not_found
+      end
     else
       render json: {}, status: :not_found
     end

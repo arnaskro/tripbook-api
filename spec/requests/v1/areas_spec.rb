@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "Areas Module" do
 
-  describe "Autocomplete Funcionality" do
+  describe "> Autocomplete Funcionality" do
     before(:each) do
       create(:country, id: 59)
       create(:city)
@@ -52,5 +52,29 @@ describe "Areas Module" do
     end
   end
   
+  describe "> Areas [GET]" do
+    it "> successfully gets country if id is valid" do
+      country = create(:country)
+      get "/v1/areas/country/#{country.id}"
+      expect(json).to eq(JSON.parse(CountrySerializer.new(country).to_json))
+    end
+
+    it "> successfully gets city if id is valid" do
+      country = create(:country)
+      city = create(:city, country_id: country.id)
+      get "/v1/areas/city/#{city.id}"
+      expect(json).to eq(JSON.parse(CitySerializer.new(city).to_json))
+    end
+
+    it "> fails getting country if id is invalid" do
+      get "/v1/areas/country/-1"
+      expect(response.status).to eq(404)
+    end
+
+    it "> fails getting city if id is invalid" do
+      get "/v1/areas/city/-1"
+      expect(response.status).to eq(404)
+    end
+  end
 
 end
