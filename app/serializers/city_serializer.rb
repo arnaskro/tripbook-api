@@ -2,7 +2,7 @@ class CitySerializer < AreaSerializer
   attributes :country
 
   def country
-    object.country.name
+    AreaSerializer.new(object.country)
   end
 
 end
