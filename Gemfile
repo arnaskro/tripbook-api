@@ -60,3 +60,7 @@ gem 'devise'
 gem 'devise_token_auth'
 # https://github.com/omniauth/omniauth
 gem 'omniauth'
+
+# -- Pagination
+# https://github.com/kaminari/kaminari
+gem 'kaminari'
