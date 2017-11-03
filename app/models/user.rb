@@ -15,8 +15,8 @@ class User < ActiveRecord::Base
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
 
-  def self.search(query, take = 20)
-    super(query, take, ["name", "lastname", "email"])
+  def self.search(query, quantity = nil, fields = ["name", "lastname", "email"])
+    super(query, quantity, fields)
   end
 
   def age

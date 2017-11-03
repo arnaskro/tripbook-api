@@ -4,8 +4,20 @@ class V1::UsersController < ApplicationController
   before_action :authenticate_v1_user!, only: [:destroy]
 
   def index
-    users = User.active.page(params[:page] || 1).per(20)
-    render json: ActiveModelSerializers::SerializableResource.new(users, each_serializer: UserListSerializer).to_json
+    # Define page number
+    page = params[:page] || "1"
+    # Define per page
+    per_page = 20
+
+    # Find users
+    users = User.active.page(page).per(per_page)
+
+    render json: UserListSerializer.new({
+      users: users,
+      total: users.total_count,
+      page: page,
+      per_page: per_page
+    }).to_json
   end
 
   def show
@@ -26,10 +38,20 @@ class V1::UsersController < ApplicationController
   end
 
   def search
-    # Find users
-    users = User.active.search(params[:query]).page(params[:page] || 1).per(20)
+    # Define page number
+    page = params[:page] || "1"
+    # Define per page
+    per_page = 20
 
-    render json: ActiveModelSerializers::SerializableResource.new(users, each_serializer: UserListSerializer).to_json
+    # Find users
+    users = User.active.search(params[:query]).page(page).per(per_page)
+
+    render json: UserListSerializer.new({
+      users: users,
+      total: users.total_count,
+      page: page,
+      per_page: per_page
+    }).to_json
   end
 
   private 
