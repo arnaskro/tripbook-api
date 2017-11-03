@@ -4,9 +4,14 @@ Rails.application.routes.draw do
   namespace :v1 do
     mount_devise_token_auth_for 'User', at: 'auth'
     get 'test_auth' => 'test#members_only'
+
+    # Areas
     get 'search/:query' => 'areas#search'
     get 'areas/:type/:id' => 'areas#get', as: :area
-    resources :users, only: [:index, :show, :destroy]
+
+    # Users
+    get 'users/search/:query' => 'users#search'
+    resources :users, only: [:index, :show, :update, :destroy]
   end
 
 end
