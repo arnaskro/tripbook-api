@@ -1,5 +1,6 @@
 class V1::UsersController < ApplicationController
-  # before_action :authenticate_v1_user!
+  before_action :get_user, only: [:show, :destroy]
+  before_action :authenticate_v1_user!, only: [:destroy]
 
   def index
     users = User.active.page(params[:page] || 1).per(20)
@@ -7,8 +8,28 @@ class V1::UsersController < ApplicationController
   end
 
   def show
-    user = User.all.find(params[:id])
-    render json: user
+    render json: @user
   end
+
+  def destroy
+    if @user.nil?
+      render status: 404
+    elsif @user != current_v1_user
+      render status: 401
+    else
+      @user.update(active: false)
+      render json: @user.active
+    end
+  end
+
+  private 
+
+    def get_user
+      @user = User.all.find(params[:id])
+    end
+
+    def user_params
+      params.require(:user).permit(:name, :lastname, :age, :gender, :birthday, :country_id, :city_id)
+    end
 
 end
