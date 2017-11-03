@@ -15,6 +15,6 @@ RSpec.describe Country, type: :model do
   
   it "is searchable by case insenstive query" do
     create(:country)
-    expect(Country.search("enmar").length > 0).to be true
+    expect(Country.search("enmar", 20).length > 0).to be true
   end
 end
