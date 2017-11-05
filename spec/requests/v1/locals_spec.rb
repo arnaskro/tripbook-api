@@ -12,4 +12,5 @@ describe 'Locals Module' do
   it "should NOT set the local model active field to false on the DELETE request when the user who is signed it is not the user who is the local user"
   it "should be possible to search for locals by name, lastname and email as a query"
   it "should not display the local in the locals list when it is set to be inactive"
+  it "it should display in the users models that he is a local if he has that model"
 end

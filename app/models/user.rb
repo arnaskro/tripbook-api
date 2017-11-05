@@ -35,4 +35,9 @@ class User < ActiveRecord::Base
       return a
     end
   end
+
+  def get_local_id
+    local ? local.id : nil
+  end
+
 end
