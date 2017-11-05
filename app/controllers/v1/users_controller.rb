@@ -9,8 +9,14 @@ class V1::UsersController < ApplicationController
     # Define per page
     per_page = 20
 
-    # Find users
-    users = User.active.page(page).per(per_page)
+    # Find active users
+    users = User.active
+    
+    # Search
+    users = users.search(params[:query]) if params[:query]
+    
+    # Paginate
+    users = users.page(page).per(per_page)
 
     render json: UserListSerializer.new({
       users: users,
@@ -35,23 +41,6 @@ class V1::UsersController < ApplicationController
   def destroy
     @user.update(active: false)
     render json: @user.active
-  end
-
-  def search
-    # Define page number
-    page = params[:page] || "1"
-    # Define per page
-    per_page = 20
-
-    # Find users
-    users = User.active.search(params[:query]).page(page).per(per_page)
-
-    render json: UserListSerializer.new({
-      users: users,
-      total: users.total_count,
-      page: page,
-      per_page: per_page
-    }).to_json
   end
 
   private 

@@ -79,11 +79,11 @@ describe "Users Module" do
   it 'should be possible to get a list of users by providing a valid query that is included in name' do
     user1 = create(:user, name: "Roberto")
 
-    get "/v1/users/search/bert"
+    get "/v1/users?query=bert"
     expect(json["users"].length > 0).to be true
-    get "/v1/users/search/Robert"
+    get "/v1/users?query=Robert"
     expect(json["users"].length > 0).to be true
-    get "/v1/users/search/Roberto"
+    get "/v1/users?query=Roberto"
     expect(json["users"].length > 0).to be true
   end
 
@@ -91,11 +91,11 @@ describe "Users Module" do
   it 'should be possible to get a list of users by providing a valid query that is included in lastname' do
     user2 = create(:user, lastname: "Macaroni", email: "macar@tripbook.dk")
 
-    get "/v1/users/search/car"
+    get "/v1/users?query=car"
     expect(json["users"].length > 0).to be true
-    get "/v1/users/search/Maca"
+    get "/v1/users?query=Maca"
     expect(json["users"].length > 0).to be true
-    get "/v1/users/search/Macaroni"
+    get "/v1/users?query=Macaroni"
     expect(json["users"].length > 0).to be true
   end
 
@@ -103,11 +103,11 @@ describe "Users Module" do
   it 'should be possible to get a list of users by providing a valid query that is included in email' do
     user3 = create(:user, email: "daniel@tripbook.dk")
 
-    get "/v1/users/search/daniel"
+    get "/v1/users?query=daniel"
     expect(json["users"].length > 0).to be true
-    get "/v1/users/search/tripbook"
+    get "/v1/users?query=tripbook"
     expect(json["users"].length > 0).to be true
-    get "/v1/users/search/daniel@tripbook.dk"
+    get "/v1/users?query=daniel@tripbook.dk"
     expect(json["users"].length > 0).to be true
   end
       
