@@ -10,7 +10,6 @@ Rails.application.routes.draw do
     get 'areas/:type/:id' => 'areas#get', as: :area
 
     # Users
-    get 'users/search/:query' => 'users#search'
     resources :users, only: [:index, :show, :update, :destroy]
   end
 
