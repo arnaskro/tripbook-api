@@ -7,10 +7,13 @@ class User < ActiveRecord::Base
           :trackable, 
           :validatable,
           :omniauthable
+
   include DeviseTokenAuth::Concerns::User
   include Searchable
+  
   belongs_to :country, required: false
   belongs_to :city, required: false
+  has_one :local
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
