@@ -24,6 +24,21 @@ describe "Users Module" do
       expect(json["page"]).to eq("1")
       expect(json["total"]).to eq(30)
     end
+
+
+
+    it "should NOT display the user in the users list when it is set to be inactive" do
+      active_user_ids = User.last(10).pluck(:id).sort
+      inactive_users = User.first(20)
+      inactive_users.each{ |x| x.update(active: false)}
+
+      get '/v1/users'
+      expect(json["users"].length).to eq(10)
+      expect(json["total"]).to eq(10)
+
+      expect(json["users"].map{|x|x["id"]}.sort).to eq(active_user_ids)
+
+    end
   end
 
   it 'should be possible to get a user with a correct id.' do
