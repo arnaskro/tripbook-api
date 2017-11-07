@@ -1,8 +1,21 @@
 require 'rails_helper'
 
 describe 'Locals Module' do
-  it "should be possible to create a local if it doesn't exist for a user who wants to become one"
-  it "should NOT create a second local model if the user already has one"
+ 
+  it "should be possible to create a local if it doesn't exist for a user who wants to become one and has VALID data" do
+    country = create(:country)
+    city = create(:city, country: country)
+    user = create(:user, country: country, city: city)
+
+    post '/v1/local'
+
+  end
+  
+  it "should NOT be possible to create a local if it doesn't exist for a user who wants to become one and has INVALID data" do
+
+  end
+
+  it "should NOT create a second local model if the user already has one but instead set the old one to active"
   it "should be possible to get a list of locals"
   it "should be possible to get a local profile page with valid id"
   it "should NOT be possible to get a local profile page without a valid id"

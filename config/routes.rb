@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     # Users
     resources :users, only: [:index, :show, :update, :destroy]
     # Locals
-    resources :locals, only: [:index, :show, :create, :update, :destroy]
+    resources :locals, only: [:index, :show]
   end
 
 end
