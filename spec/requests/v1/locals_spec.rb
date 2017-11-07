@@ -42,11 +42,24 @@ describe 'Locals Module' do
     end  
 
     it "should be possible to paginate a list of locals" do
+      get "/v1/locals"
+      expect(json["total"]).to eq(30)
+      expect(json["page"]).to eq("1")
+      expect(json["locals"].length).to eq(20)
 
+      get "/v1/locals?page=2"
+      expect(json["page"]).to eq("2")
+      expect(json["locals"].length).to eq(10)
     end
 
     it "should not display the local in the locals list when it is set to be inactive" do
+      10.times do |i|
+        user = create(:user, name:"new_name#{i}", email:"name#{i}@demo.dk")
+        create(:local, user: user, country_id: @country1.id, city_id: @city1.id, active: false)
+      end
 
+      get "/v1/locals"
+      expect(json["total"]).to eq(30)
     end
   end
 
