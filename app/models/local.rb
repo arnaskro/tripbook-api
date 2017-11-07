@@ -1,7 +1,7 @@
 class Local < ApplicationRecord
   belongs_to :user, required: true
-  has_one :country, through: :user, required: true
-  has_one :city, through: :user, required: true
+  belongs_to :country, required: true
+  belongs_to :city, required: true
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }

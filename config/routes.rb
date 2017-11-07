@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     get 'test_auth' => 'test#members_only'
 
     # Areas
-    get 'search/:query' => 'areas#search'
+    get 'areas/:query' => 'areas#search'
     get 'areas/:type/:id' => 'areas#get', as: :area
 
     # Users
