@@ -9,8 +9,12 @@ class V1::LocalsController < ApplicationController
     # Find active locals
     locals = Local.active
     
-    # Search
+    # Filter by query
     locals = locals.search(params[:query]) if params[:query]
+    # Filter by country
+    locals = locals.where(country_id: params[:country_id]) if params[:country_id]
+    # Filter by city
+    locals = locals.where(city_id: params[:city_id]) if params[:city_id]
     
     # Paginate
     locals = locals.page(page).per(per_page)
