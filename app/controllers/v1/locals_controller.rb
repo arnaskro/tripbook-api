@@ -1,5 +1,7 @@
-class V1::LocalsController < ApplicationController
+class V1::LocalsController < ApiController
   before_action :get_local, only: [:show, :update, :destroy]
+  before_action :authenticate_v1_user!, only: [:create, :destroy]
+  before_action :check_is_same_user, only: [:update, :destroy]
 
   def index
     # Define page number
@@ -28,6 +30,30 @@ class V1::LocalsController < ApplicationController
     }).to_json
   end
 
+  def create
+    local = current_v1_user.local
+
+    if local.nil?
+      local = Local.new(local_params)
+      local.user_id = current_v1_user.id
+
+      if local.save
+        render json: local, status: 201
+      else
+        render json: local.errors.full_messages, status: 422
+      end
+    else
+
+      if !local.active
+        local.update(active: true)
+        render json: local, status: 200
+      else
+        render json: local, status: 400
+      end
+    end
+
+  end
+
 
   def show
     render json: @local
@@ -41,6 +67,10 @@ class V1::LocalsController < ApplicationController
       if @local.nil?
         render json: false, status: 404
       end
+    end
+
+    def local_params
+      params.require(:local).permit(:description, :quote, :available, :available_from, :available_to, :country_id, :city_id)
     end
 
 end

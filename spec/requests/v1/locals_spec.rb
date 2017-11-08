@@ -62,13 +62,51 @@ describe 'Locals Module' do
       get "/v1/locals"
       expect(json["total"]).to eq(30)
     end
+
+    it "should be possible to search for locals by name as a query" do
+      get '/v1/locals?query=name13'
+      expect(json["total"]).to eq(1)
+    end
+
+    it "should be possible to search for locals by email as a query" do
+      get '/v1/locals?query=email15'
+      expect(json["total"]).to eq(1)
+    end
   end
 
-  it "should be possible to create a local if it doesn't exist for a user who wants to become one and has VALID data"
-  it "should NOT be possible to create a local if it doesn't exist for a user who wants to become one and has INVALID data"
+  describe "> [POST] create local >" do
+    before(:each) do
+      @user = create(:user)
+    end
 
-  it "should NOT create a second local model if the user already has one but instead set the old one to active"
+    it "does not allow to create a local if the user is not signed it" do
+      post "/v1/locals"
+      # test for the 401 status-code
+      expect(response).to be_unauthorized
+    end
+
+    it "create local if it doesn't exist for a user who wants to become one and has VALID data provided" do
+      post '/v1/locals', params: { local: { country_id: @country1.id, city_id: @city1.id } }, headers: @user.create_new_auth_token
+      expect(response.status).to eq(201)
+      expect(@user.local.nil?).to be false
+    end
+
+    it "does not create local if it doesn't exist for a user who wants to become one and has INVALID data provided" do    
+      post '/v1/locals', params: { local: { description: "test" } }, headers: @user.create_new_auth_token
+      expect(response.status).to eq(422)
+      expect(@user.local.nil?).to be true
+    end
+
+    it "updates the local to be active if it was inactive and was already created" do
+      create(:local, user_id: @user.id, country_id: @country1.id, city_id: @city1.id, active:false)
+      post '/v1/locals', headers: @user.create_new_auth_token
+      expect(response.status).to eq(200)
+      expect(@user.local.nil?).to be false
+      expect(@user.local.active).to be true
+    end
   
+  end
+
   it "should be possible to get a local profile page with valid id" do
     local = create(:local, id: 100, user: create(:user), country_id: @country1.id, city_id: @city1.id)
     get "/v1/locals/#{local.id}"
@@ -79,6 +117,5 @@ describe 'Locals Module' do
   it "should NOT be possible to update local profile details when the user is NOT signed for that local person"
   it "should set the local model active field to false when the user who is signed in as the local and makes a DELETE request"
   it "should NOT set the local model active field to false on the DELETE request when the user who is signed it is not the user who is the local user"
-  it "should be possible to search for locals by name, lastname and email as a query"
   it "it should display in the users models that he is a local if he has that model"
 end

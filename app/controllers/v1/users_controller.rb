@@ -1,4 +1,4 @@
-class V1::UsersController < ApplicationController
+class V1::UsersController < ApiController
   before_action :get_user, only: [:show, :update, :destroy]
   before_action :check_is_same_user, only: [:update, :destroy]
   before_action :authenticate_v1_user!, only: [:destroy]
@@ -53,14 +53,8 @@ class V1::UsersController < ApplicationController
       end
     end
 
-    def check_is_same_user
-      if @user != current_v1_user
-        render json: false, status: 401
-      end
-    end
-
     def user_params
-      params.require(:user).permit(:name, :lastname, :age, :gender, :birthday, :country_id, :city_id)
+      params.require(:user).permit(:name, :lastname, :age, :gender, :birthday)
     end
 
 end

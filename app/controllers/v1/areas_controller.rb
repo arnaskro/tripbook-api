@@ -1,4 +1,4 @@
-class V1::AreasController < ApplicationController
+class V1::AreasController < ApiController
 
   def search
     # Define the maximum size of the response list
