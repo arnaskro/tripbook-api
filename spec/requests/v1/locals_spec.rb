@@ -107,14 +107,27 @@ describe 'Locals Module' do
   
   end
 
-  it "should be possible to get a local profile page with valid id" do
+  it "[GET] should be possible to get a local profile page with valid id" do
     local = create(:local, id: 100, user: create(:user), country_id: @country1.id, city_id: @city1.id)
     get "/v1/locals/#{local.id}"
     expect(json["id"]).to eq(local.id)
   end
 
-  it "should be possible to update local profile details when the user is signed for that local person"
-  it "should NOT be possible to update local profile details when the user is NOT signed for that local person"
-  it "should set the local model active field to false when the user who is signed in as the local and makes a DELETE request"
-  it "should NOT set the local model active field to false on the DELETE request when the user who is signed it is not the user who is the local user"
+  describe 
+
+  it "[PUT] should be possible to update local profile details" do
+    user = create(:user)
+    local = create(:local, user: user, country_id: @country1.id, city_id: @city1.id)
+    put "/v1/locals/#{local.id}", params: { local: { description: "abc" } }, headers: user.create_new_auth_token
+    expect(response.status).to eq 200
+    expect(json["description"]).to eq("abc")
+  end
+  
+  it "[DELETE] should set the local model active field to false when the user who is signed in as the local and makes a DELETE request" do
+    user = create(:user)
+    local = create(:local, user: user, country_id: @country1.id, city_id: @city1.id, active: true)
+    delete "/v1/locals/#{local.id}", headers: user.create_new_auth_token
+    expect(response.status).to eq 200
+    expect(Local.find(local.id).active).to be false
+  end
 end

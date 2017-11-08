@@ -1,7 +1,6 @@
 class V1::LocalsController < ApiController
   before_action :get_local, only: [:show, :update, :destroy]
-  before_action :authenticate_v1_user!, only: [:create, :destroy]
-  before_action :check_is_same_user, only: [:update, :destroy]
+  before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
 
   def index
     # Define page number
@@ -57,6 +56,22 @@ class V1::LocalsController < ApiController
 
   def show
     render json: @local
+  end
+  
+  def update
+    if @local.update(local_params)
+      render json: @local, status: 200
+    else
+      render json: @local, status: 400
+    end
+  end
+  
+  def destroy
+    if @local.update(active: false)
+      render json: @local, status: 200
+    else
+      render json: @local, status: 400
+    end
   end
 
   private
