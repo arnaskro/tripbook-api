@@ -9,24 +9,24 @@ describe "Areas Module" do
     end
 
     it 'successfully autocompletes a query for city' do
-      get "/v1/search/Horsens"
+      get "/v1/areas/Horsens"
       expect(json.length > 0).to be true
     end
 
     it 'successfully autocompletes a query for country' do
-      get "/v1/search/Denmark"
+      get "/v1/areas/Denmark"
       expect(json.length > 0).to be true
     end
 
     it 'is optimised to display a maximum of 20 results' do
       30.times{ |i| create(:country) }
 
-      get "/v1/search/Denmark"
+      get "/v1/areas/Denmark"
       expect(json.length).to eq(20)
     end
     
     it 'returns empty if nothing matches' do
-      get "/v1/search/impossible_query"
+      get "/v1/areas/impossible_query"
       expect(json.length == 0).to be true
     end
     
@@ -35,7 +35,7 @@ describe "Areas Module" do
       expected_response = JSON.parse(AreaSerializer.new(country).to_json)
       expected_response["parent_area"] = nil
 
-      get "/v1/search/#{country.name}"
+      get "/v1/areas/#{country.name}"
       expect(json[0]).to eq(expected_response)
     end
         
@@ -47,7 +47,7 @@ describe "Areas Module" do
       expected_response = JSON.parse(AreaSerializer.new(city).to_json)
       expected_response["parent_area"] = country.name
 
-      get "/v1/search/#{city.name}"
+      get "/v1/areas/#{city.name}"
       expect(json[0]).to eq(expected_response)
     end
   end

@@ -110,5 +110,12 @@ describe "Users Module" do
     get "/v1/users?query=daniel@tripbook.dk"
     expect(json["users"].length > 0).to be true
   end
+
+  it "it should display in the users models that he is a local if he has that model" do
+    user = create(:user, email: "bob.the.builder@tripbook.dk")
+    local = create(:local, user_id: user.id, country_id: create(:country).id, city_id: create(:city, country_id: 1).id)
+    get "/v1/users/#{user.id}"
+    expect(json["local_id"]).to eq local.id
+  end
       
 end

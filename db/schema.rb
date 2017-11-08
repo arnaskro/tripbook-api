@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103161742) do
+ActiveRecord::Schema.define(version: 20171107230217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,20 @@ ActiveRecord::Schema.define(version: 20171103161742) do
     t.integer "capital_city_id"
   end
 
+  create_table "locals", force: :cascade do |t|
+    t.integer "user_id"
+    t.boolean "available", default: false
+    t.boolean "active", default: true
+    t.date "available_from"
+    t.date "available_to"
+    t.string "description"
+    t.string "quote"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "city_id"
+    t.integer "country_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -53,8 +67,6 @@ ActiveRecord::Schema.define(version: 20171103161742) do
     t.datetime "updated_at", null: false
     t.datetime "birthday"
     t.integer "gender", limit: 2
-    t.integer "city_id"
-    t.integer "country_id"
     t.boolean "active", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

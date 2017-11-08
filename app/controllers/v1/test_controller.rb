@@ -1,4 +1,4 @@
-class V1::TestController < ApplicationController
+class V1::TestController < ApiController
   before_action :authenticate_v1_user!
 
   def members_only
