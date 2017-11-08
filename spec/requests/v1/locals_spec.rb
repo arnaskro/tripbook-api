@@ -1,13 +1,14 @@
 require 'rails_helper'
 
 describe 'Locals Module' do
-
+  before(:each) do
+    @country1 = create(:country)
+    @city1 = create(:city, country: @country1)
+    @city2 = create(:city, country: @country1)
+  end
+  
   describe '> [GET] locals >' do
     before(:each) do
-      @country1 = create(:country)
-      @city1 = create(:city, country: @country1)
-      @city2 = create(:city, country: @country1)
-
       10.times do |i|
         user = create(:user, name:"name#{i}", email:"email#{i}@demo.dk")
         create(:local, user: user, country_id: @country1.id, city_id: @city1.id)
@@ -63,14 +64,17 @@ describe 'Locals Module' do
     end
   end
 
-
-
   it "should be possible to create a local if it doesn't exist for a user who wants to become one and has VALID data"
   it "should NOT be possible to create a local if it doesn't exist for a user who wants to become one and has INVALID data"
 
   it "should NOT create a second local model if the user already has one but instead set the old one to active"
-  it "should be possible to get a local profile page with valid id"
-  it "should NOT be possible to get a local profile page without a valid id"
+  
+  it "should be possible to get a local profile page with valid id" do
+    local = create(:local, id: 100, user: create(:user), country_id: @country1.id, city_id: @city1.id)
+    get "/v1/locals/#{local.id}"
+    expect(json["id"]).to eq(local.id)
+  end
+
   it "should be possible to update local profile details when the user is signed for that local person"
   it "should NOT be possible to update local profile details when the user is NOT signed for that local person"
   it "should set the local model active field to false when the user who is signed in as the local and makes a DELETE request"

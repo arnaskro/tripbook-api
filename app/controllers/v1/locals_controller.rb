@@ -1,4 +1,5 @@
 class V1::LocalsController < ApplicationController
+  before_action :get_local, only: [:show, :update, :destroy]
 
   def index
     # Define page number
@@ -26,5 +27,20 @@ class V1::LocalsController < ApplicationController
       per_page: per_page
     }).to_json
   end
+
+
+  def show
+    render json: @local
+  end
+
+  private
+
+    def get_local
+      @local = Local.all.find(params[:id])
+
+      if @local.nil?
+        render json: false, status: 404
+      end
+    end
 
 end
