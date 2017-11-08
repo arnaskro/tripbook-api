@@ -117,5 +117,4 @@ describe 'Locals Module' do
   it "should NOT be possible to update local profile details when the user is NOT signed for that local person"
   it "should set the local model active field to false when the user who is signed in as the local and makes a DELETE request"
   it "should NOT set the local model active field to false on the DELETE request when the user who is signed it is not the user who is the local user"
-  it "it should display in the users models that he is a local if he has that model"
 end

@@ -9,5 +9,4 @@ class UserListItemSerializer < ActiveModel::Serializer
   attribute :url do
     v1_user_path(id: object.id)
   end
-
 end
