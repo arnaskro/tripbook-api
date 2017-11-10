@@ -42,7 +42,7 @@ class V1::MeetingsController < ApiController
   private
 
     def get_meeting
-      @meeting = Meeting.find(params[:meeting_id])
+      @meeting = Meeting.find(params[:id])
     end
 
     def meeting_params
