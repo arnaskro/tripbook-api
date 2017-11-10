@@ -12,9 +12,10 @@ class User < ActiveRecord::Base
   include Searchable
   
   has_one :local
-  # Meetings & Trips
+  # Meetings & trips
   has_many :meetings
-  has_many :trips, through: :meetings 
+  has_many :scheduled_trips, through: :meetings 
+  has_many :trips
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }

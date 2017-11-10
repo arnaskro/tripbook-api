@@ -3,7 +3,11 @@ class V1::MeetingsController < ApiController
   before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
 
   def index
+    
+  end
 
+  def create
+    
   end
 
   def show
