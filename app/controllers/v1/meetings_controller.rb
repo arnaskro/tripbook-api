@@ -1,6 +1,6 @@
 class V1::MeetingsController < ApiController
-  before_action :get_meeting, only: [:show, :update, :destroy]
-  before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
+  before_action :get_meeting, only: [:show, :update]
+  before_action :authenticate_v1_user!, only: [:create, :update]
 
   # [GET] Meetings (trip_id, user_id, local_id)
   def index
@@ -18,19 +18,25 @@ class V1::MeetingsController < ApiController
   end
 
   def create
-    
+    meeting = Meeting.new(meeting_params)
+
+    if meeting.save
+      render json: meeting, status: 201
+    else
+      render json: meeting.errors.full_messages, status: 422
+    end
   end
 
   def show
-
+    render json: @meeting
   end
 
   def update
-
-  end
-
-  def destroy
-    
+    if @meeting.update(meeting_params)
+      render json: @meeting, status: 200
+    else
+      render json: @meeting.errors.full_messages, status: 422
+    end
   end
 
   private

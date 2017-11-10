@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     # Trips
     resources :trips, only: [:index, :show, :create, :update, :destroy]
     # Meetings
-    resources :meetings, only: [:index, :show, :create, :update, :destroy]
+    resources :meetings, only: [:index, :show, :create, :update]
   end
 
 end
