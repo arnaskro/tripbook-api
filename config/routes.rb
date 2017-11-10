@@ -13,6 +13,10 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :show, :update, :destroy]
     # Locals
     resources :locals, only: [:index, :show, :create, :update, :destroy]
+    # Trips
+    resources :trips, only: [:index, :show, :create, :update, :destroy]
+    # Meetings
+    resources :meetings, only: [:index, :show, :create, :update, :destroy]
   end
 
 end
