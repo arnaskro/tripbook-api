@@ -12,6 +12,5 @@ class Trip < ApplicationRecord
 
 
   validates :user, :title, :description, :trip_status, :trip_type, presence: true
-  
 
 end

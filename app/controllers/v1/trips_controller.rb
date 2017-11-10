@@ -1,7 +1,8 @@
 class V1::TripsController < ApiController
   before_action :get_trip, only: [:show, :update, :destroy]
-  # before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
+  before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
 
+  # [GET] Trips (city_id, country_id, local_id, trip_type)
   def index
     trips = Trip.all
     # (optional) Get trips for the trip type
