@@ -42,7 +42,7 @@ class V1::TripsController < ApiController
       # Purge previous destinations
       @trip.trip_destinations.delete_all
       # Create new ones
-      params.require(:cities).map{ |city_id| trip.trip_destinations.create(city_id: city_id) } if @trip.valid?
+      params.require(:cities).map{ |city_id| @trip.trip_destinations.create(city_id: city_id) } if @trip.valid?
 
       render json: @trip, status: 201
     else
@@ -52,7 +52,7 @@ class V1::TripsController < ApiController
 
   def destroy
     if @trip.meetings.size > 0
-      render json: "A trip cannot be deleted because it has meetings!", status: 400
+      render json: { error: "A trip cannot be deleted because it has meetings!" }, status: 400
     else
       render status: 200
     end
@@ -61,7 +61,7 @@ class V1::TripsController < ApiController
   private
 
     def get_trip
-      @trip = Trip.find(params[:trip_id])
+      @trip = Trip.find(params[:id])
     end
 
     def trip_params
