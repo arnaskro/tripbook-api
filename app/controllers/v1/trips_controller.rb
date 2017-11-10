@@ -1,6 +1,6 @@
 class V1::TripsController < ApiController
   before_action :get_trip, only: [:show, :update, :destroy]
-  before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
+  # before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
 
   def index
     trips = Trip.all
@@ -27,17 +27,35 @@ class V1::TripsController < ApiController
     trip = Trip.create(trip_params)
 
     # If trip is valid, create trip destinations
-    trip.trip_destinations.create(params[:trip][:cities].map{ |city_id| { city_id: city_id } }) if trip.valid?
+    params.require(:cities).map{ |city_id| trip.trip_destinations.create(city_id: city_id) } if trip.valid?
 
+    if trip.valid?
+      render json: trip, status: 201
+    else
+      render json: trip.errors.full_messages, status: 422
+    end
 
   end
 
   def update
+    if @trip.update(trip_params)
+      # Purge previous destinations
+      @trip.trip_destinations.delete_all
+      # Create new ones
+      params.require(:cities).map{ |city_id| trip.trip_destinations.create(city_id: city_id) } if @trip.valid?
 
+      render json: @trip, status: 201
+    else
+      render json: @trip.errors.full_messages, status: 422
+    end
   end
 
   def destroy
-
+    if @trip.meetings.size > 0
+      render json: "A trip cannot be deleted because it has meetings!", status: 400
+    else
+      render status: 200
+    end
   end
 
   private
@@ -47,7 +65,7 @@ class V1::TripsController < ApiController
     end
 
     def trip_params
-      params.require(:trip).permit(:title, :description, :trip_status, :trip_type, :number_of_people, :from_date, :to_date)
+      params.require(:trip).permit(:user_id, :title, :description, :trip_status, :trip_type, :number_of_people, :from_date, :to_date)
     end
     
 end
