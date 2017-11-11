@@ -1,15 +1,15 @@
 class V1::ConversationsController < ApiController
-  before_action :authenticate_v1_user!, only: [:create]
+  before_action :authenticate_v1_user!
 
   # [GET] Conversations
   def index
-    conversations = current_v1_user.conversations
+    conversations = current_v1_user.conversations.uniq
     render json: conversations
   end
 
   def create
     # Find conversations with the other user
-    conversations = current_v1_user.conversations.select{ |x| x.participants.pluck(:user_id).include?(params[:user_id]) }
+    conversations = current_v1_user.conversations.uniq.select{ |x| x.participants.pluck(:user_id).include?(params[:user_id]) }
 
     # if conversations were found, return the first one
     # else create a new one and return it
@@ -27,7 +27,7 @@ class V1::ConversationsController < ApiController
 
   def show
     # Find conversation
-    conversation = Conversation.find(params[:id])
+    conversation = current_v1_user.conversations.find(params[:id])
 
     # Order messages by created_at date at a descending order
     messages = conversation.messages.order('messages.created_at desc')
@@ -52,9 +52,9 @@ class V1::ConversationsController < ApiController
   end
 
   def add
-    participant = current_v1_user.conversation_participants.where(conversation_id: params[:id])
+    participant = current_v1_user.conversation_participants.where(conversation_id: params[:id]).first
     message = participant.messages.new(text: params[:text])
-    render status: message.save ? 200 : 400
+    render json: message, status: message.save ? 200 : 400
   end
 
 end
