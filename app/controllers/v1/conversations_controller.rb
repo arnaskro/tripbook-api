@@ -42,12 +42,12 @@ class V1::ConversationsController < ApiController
     messages = messages.first(20)
 
     # Build a link to get previous message
-    previous_messages_path = v1_get_messages_path(id:params[:id], date: messages.last.created_at) if left_messages_count > 0
+    get_more_link = v1_get_messages_path(id:params[:id], date: messages.last.created_at) if left_messages_count > 0
 
     render json: {
-      conversation: Integer(params[:id]),
+      conversation: conversation,
       messages: messages,
-      previous: previous_messages_path
+      get_more: get_more_link
     }
   end
 
