@@ -27,7 +27,7 @@ class V1::ConversationsController < ApiController
 
   def show
     # Find conversation
-    conversation = current_v1_user.conversations.find(params[:id])
+    conversation = Conversation.find(params[:id])
 
     # Order messages by created_at date at a descending order
     messages = conversation.messages.order('messages.created_at desc')
