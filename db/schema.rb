@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110160309) do
+ActiveRecord::Schema.define(version: 20171110173314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,20 @@ ActiveRecord::Schema.define(version: 20171110160309) do
     t.integer "country_id"
     t.decimal "latitude", precision: 15, scale: 6
     t.decimal "longitude", precision: 15, scale: 6
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "conversation_participants", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "conversation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_conversation_participants_on_conversation_id"
+    t.index ["user_id"], name: "index_conversation_participants_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -55,6 +69,14 @@ ActiveRecord::Schema.define(version: 20171110160309) do
     t.datetime "updated_at", null: false
     t.index ["trip_id"], name: "index_meetings_on_trip_id"
     t.index ["user_id"], name: "index_meetings_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "conversation_participant_id"
+    t.string "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_participant_id"], name: "index_messages_on_conversation_participant_id"
   end
 
   create_table "trip_destinations", force: :cascade do |t|
@@ -106,8 +128,11 @@ ActiveRecord::Schema.define(version: 20171110160309) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "conversation_participants", "conversations"
+  add_foreign_key "conversation_participants", "users"
   add_foreign_key "meetings", "trips"
   add_foreign_key "meetings", "users"
+  add_foreign_key "messages", "conversation_participants"
   add_foreign_key "trip_destinations", "cities"
   add_foreign_key "trip_destinations", "trips"
   add_foreign_key "trips", "users"

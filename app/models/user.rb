@@ -16,6 +16,9 @@ class User < ActiveRecord::Base
   has_many :meetings
   has_many :scheduled_trips, through: :meetings 
   has_many :trips
+  # Messages
+  has_many :conversation_participants
+  has_many :conversations, through: :conversation_participants
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
