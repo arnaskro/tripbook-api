@@ -17,6 +17,11 @@ Rails.application.routes.draw do
     resources :trips, only: [:index, :show, :create, :update, :destroy]
     # Meetings
     resources :meetings, only: [:index, :show, :create, :update]
+    # Messages
+    resources :conversations, only: [:index, :show, :create]
+    get 'conversations/:id/:date' => 'conversations#show', as: :get_messages
+    post 'conversations/:id/add_message' => 'conversations#add'
+
   end
 
 end
