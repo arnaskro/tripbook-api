@@ -2,6 +2,8 @@ class Local < ApplicationRecord
   belongs_to :user, required: true
   belongs_to :country, required: true
   belongs_to :city, required: true
+  # Reviews
+  has_many :reviews, as: :object
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }

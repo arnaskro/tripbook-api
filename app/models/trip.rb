@@ -9,7 +9,8 @@ class Trip < ApplicationRecord
   # Meetings & Users
   has_many :meetings
   has_many :users, through: :meetings
-
+  # Reviews
+  has_many :reviews, as: :object
 
   validates :user, :title, :description, :trip_status, :trip_type, presence: true
 
