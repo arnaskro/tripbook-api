@@ -15,13 +15,13 @@ describe "Reviews Module" do
 
   describe "(object_type: local)" do
     it '[GET] get reviews' do
-      get "/v1/locals/#{@local.id}/reviews"
+      get "/v1/reviews/local/#{@local.id}"
       expect(json["reviews"].length > 0).to be true
     end
 
     it '[GET] get reviews (page: 2)' do
       30.times { |i| create(:review_local, user: create(:user), text:"message#{i}", object: @local) }
-      get "/v1/locals/#{@local.id}/reviews?page=2"
+      get "/v1/reviews/local/#{@local.id}?page=2"
       expect(json["page"]).to eq(2)
       expect(json["reviews"].length > 0).to be true
     end
@@ -32,7 +32,7 @@ describe "Reviews Module" do
       # Make sure it doesnt exist yet
       expect(Review.where(text: message).size).to eq(0)
 
-      post "/v1/locals/#{@local.id}/reviews", params: { text: message, stars: stars }, headers: @user.create_new_auth_token
+      post "/v1/reviews/local/#{@local.id}", params: { text: message, stars: stars }, headers: @user.create_new_auth_token
 
       expect(response.status).to eq(201)
       expect(json['text']).to eq(message)
@@ -46,7 +46,7 @@ describe "Reviews Module" do
       # Make sure it doesnt exist yet
       expect(Review.where(text: message).size).to eq(0)
 
-      post "/v1/locals/#{@local.id}/reviews", params: { }, headers: @user.create_new_auth_token
+      post "/v1/reviews/local/#{@local.id}", params: { }, headers: @user.create_new_auth_token
 
       expect(response.status).to eq(400)
       # Make sure it still doesnt exist yet
@@ -54,20 +54,20 @@ describe "Reviews Module" do
     end
 
     it '[DELETE] review' do
-      delete "/v1/locals/#{@local.id}/reviews/#{@local_review.id}", headers: @user.create_new_auth_token
+      delete "/v1/reviews/#{@local_review.id}", headers: @user.create_new_auth_token
       expect(response.status).to eq(200)
     end
   end
   
   describe "(object_type: trip)" do
     it '[GET] get reviews' do
-      get "/v1/trips/#{@trip.id}/reviews"
+      get "/v1/reviews/trip/#{@trip.id}"
       expect(json["reviews"].length > 0).to be true
     end
 
     it '[GET] get reviews (page: 2)' do
       30.times { |i| create(:review_trip, user: create(:user), text:"message#{i}", object: @trip) }
-      get "/v1/trips/#{@trip.id}/reviews?page=2"
+      get "/v1/reviews/trip/#{@trip.id}?page=2"
       expect(json["page"]).to eq(2)
       expect(json["reviews"].length > 0).to be true
     end
@@ -78,7 +78,7 @@ describe "Reviews Module" do
       # Make sure it doesnt exist yet
       expect(Review.where(text: message).size).to eq(0)
 
-      post "/v1/trips/#{@trip.id}/reviews", params: { text: message, stars: stars }, headers: @user.create_new_auth_token
+      post "/v1/reviews/trip/#{@trip.id}", params: { text: message, stars: stars }, headers: @user.create_new_auth_token
 
       expect(response.status).to eq(201)
       expect(json['text']).to eq(message)
@@ -92,7 +92,7 @@ describe "Reviews Module" do
       # Make sure it doesnt exist yet
       expect(Review.where(text: message).size).to eq(0)
 
-      post "/v1/trips/#{@trip.id}/reviews", params: { }, headers: @user.create_new_auth_token
+      post "/v1/reviews/trip/#{@trip.id}", params: { }, headers: @user.create_new_auth_token
 
       expect(response.status).to eq(400)
       # Make sure it still doesnt exist yet
@@ -100,7 +100,7 @@ describe "Reviews Module" do
     end
 
     it '[DELETE] review' do
-      delete "/v1/trips/#{@trip.id}/reviews/#{@trip_review.id}", headers: @user.create_new_auth_token
+      delete "/v1/reviews/#{@trip_review.id}", headers: @user.create_new_auth_token
       expect(response.status).to eq(200)
     end
   end
