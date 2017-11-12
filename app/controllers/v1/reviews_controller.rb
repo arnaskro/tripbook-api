@@ -4,15 +4,24 @@ class V1::ReviewsController < ApiController
 
   # [GET] /v1/reviews/:object_type/:object_id
   def index
-    # Should have the object already
-   
+    # Get reviews
+    reviews = @object.reviews
+    # Paginate
+    reviews = reviews.page(params[:page] || 1).per(params[:per_page] || 10)
+
+    render json: {
+      reviews: reviews,
+      total: reviews.total_count,
+      page: reviews.current_page,
+      per_page: reviews.limit_value
+    }
   end
 
+  # [POST] /v1/reviews/:object_type/:object_id
   def create
-    review = Review.new(review_params)
-    review.object = @object
+    review = Review.create(review_params.merge(object: @object, user: current_v1_user))
 
-    if review.save
+    if review.valid?
       render json: review, status: 201
     else
       render json: review.errors.full_messages, status: 422
