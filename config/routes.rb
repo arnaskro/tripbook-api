@@ -9,6 +9,11 @@ Rails.application.routes.draw do
     get 'areas/:query' => 'areas#search'
     get 'areas/:type/:id' => 'areas#get', as: :area
 
+    # Reviews
+    get 'reviews/:object_type/:object_id' => 'reviews#index'
+    post 'reviews/:object_type/:object_id' => 'reviews#create'
+    delete 'reviews/:id' => 'reviews#destroy'
+
     # Users
     resources :users, only: [:index, :show, :update, :destroy]
     # Locals
