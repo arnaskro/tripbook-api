@@ -30,11 +30,17 @@ class V1::ReviewsController < ApiController
 
   # [DELETE] /v1/reviews/:id
   def destroy
-    review = Review.find(params[:id])
-    if review.delete
-      render json: true, status: 200
+    review = Review.where(id: params[:id]).first
+    # Make sure that only the user who wrote the review or the user who created the trip or the local person can only delete the trip
+    if review.user == current_v1_user || review.object.user == current_v1_user
+      # Delete it
+      if review.delete
+        render json: true, status: 200
+      else
+        render json: false, status: 400
+      end
     else
-      render json: false, status: 400
+      render json: { error: "You have no rights!" }, status: 201
     end
   end
 
