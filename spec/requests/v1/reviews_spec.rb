@@ -32,7 +32,7 @@ describe "Reviews Module" do
       # Make sure it doesnt exist yet
       expect(Review.where(text: message).size).to eq(0)
 
-      post "/v1/reviews/local/#{@local.id}", params: { text: message, stars: stars }, headers: @user.create_new_auth_token
+      post "/v1/reviews/local/#{@local.id}", params: { review: { text: message, stars: stars } }, headers: @user.create_new_auth_token
 
       expect(response.status).to eq(201)
       expect(json['text']).to eq(message)
@@ -41,21 +41,14 @@ describe "Reviews Module" do
     end
 
     it '[POST] create review without valid parameters' do
-      message = "non_existant"
-      stars = 4
-      # Make sure it doesnt exist yet
-      expect(Review.where(text: message).size).to eq(0)
-
-      post "/v1/reviews/local/#{@local.id}", params: { }, headers: @user.create_new_auth_token
-
-      expect(response.status).to eq(400)
-      # Make sure it still doesnt exist yet
-      expect(Review.where(text: message).size).to eq(0)
+      expect{ post "/v1/reviews/local/#{@local.id}", headers: @user.create_new_auth_token }.to raise_error  ActionController::ParameterMissing
     end
 
     it '[DELETE] review' do
+      expect(Review.where(id: @local_review.id).first).to be
       delete "/v1/reviews/#{@local_review.id}", headers: @user.create_new_auth_token
       expect(response.status).to eq(200)
+      expect(Review.where(id: @local_review.id).first).to be_nil
     end
   end
   
@@ -78,7 +71,7 @@ describe "Reviews Module" do
       # Make sure it doesnt exist yet
       expect(Review.where(text: message).size).to eq(0)
 
-      post "/v1/reviews/trip/#{@trip.id}", params: { text: message, stars: stars }, headers: @user.create_new_auth_token
+      post "/v1/reviews/trip/#{@trip.id}", params: { review: { text: message, stars: stars } }, headers: @user.create_new_auth_token
 
       expect(response.status).to eq(201)
       expect(json['text']).to eq(message)
@@ -87,21 +80,14 @@ describe "Reviews Module" do
     end
 
     it '[POST] create review without valid parameters' do
-      message = "non_existant"
-      stars = 4
-      # Make sure it doesnt exist yet
-      expect(Review.where(text: message).size).to eq(0)
-
-      post "/v1/reviews/trip/#{@trip.id}", params: { }, headers: @user.create_new_auth_token
-
-      expect(response.status).to eq(400)
-      # Make sure it still doesnt exist yet
-      expect(Review.where(text: message).size).to eq(0)
+      expect{ post "/v1/reviews/trip/#{@local.id}", headers: @user.create_new_auth_token }.to raise_error  ActionController::ParameterMissing
     end
 
     it '[DELETE] review' do
+      expect(Review.where(id: @trip_review.id).first).to be
       delete "/v1/reviews/#{@trip_review.id}", headers: @user.create_new_auth_token
       expect(response.status).to eq(200)
+      expect(Review.where(id: @trip_review.id).first).to be_nil
     end
   end
 
