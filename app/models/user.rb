@@ -45,4 +45,8 @@ class User < ActiveRecord::Base
     local ? local.id : nil
   end
 
+  def has_local?
+    return !local.nil? && local.active
+  end
+
 end

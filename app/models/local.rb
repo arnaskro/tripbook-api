@@ -13,4 +13,12 @@ class Local < ApplicationRecord
     return quantity.nil? ? list : list.take(quantity)
   end
 
+  def review_count
+    return reviews.size
+  end
+
+  def rating
+    return (reviews.pluck(:stars).reduce{ |a, b| a.to_f + b.to_f } / reviews.size).round(2)
+  end
+
 end
