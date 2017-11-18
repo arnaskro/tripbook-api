@@ -13,12 +13,18 @@ class Local < ApplicationRecord
     return quantity.nil? ? list : list.take(quantity)
   end
 
-  def review_count
+  def get_review_count
     return reviews.size
   end
 
-  def rating
-    return (reviews.pluck(:stars).reduce{ |a, b| a.to_f + b.to_f } / reviews.size).round(2)
+  def get_rating
+    if get_review_count > 0
+      # the sum of all stars form all reviews
+      sum_of_all_stars = reviews.pluck(:stars).reduce{ |a, b| a.to_f + b.to_f }
+      return (sum_of_all_stars / get_review_count).round(2)
+    else
+      return 0
+    end
   end
 
 end

@@ -6,11 +6,11 @@ class LocalSerializer < ActiveModel::Serializer
   end
 
   attribute :review_count do
-    return object.review_count
+    object.get_review_count
   end
 
   attribute :rating do
-    return object.rating
+    object.get_rating
   end
 
 end
