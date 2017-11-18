@@ -50,6 +50,34 @@ describe "Areas Module" do
       get "/v1/areas/#{city.name}"
       expect(json[0]).to eq(expected_response)
     end
+
+    it "returns only cities when we specify a parameter 'only' as 'cities'" do
+      30.times{ |i| 
+        c = create(:country, name: "common")
+        5.times{ |i| 
+          create(:city, name: "common", country_id: c.id)
+        }
+      }
+
+      get "/v1/areas/common", params: { only: "cities" }
+      json.each do |area|
+        expect(area["type"]).to eq("city")
+      end
+    end
+
+    it "returns only countries when we specify a parameter 'only' as 'countries'" do
+      30.times{ |i| 
+        c = create(:country, name: "common")
+        5.times{ |i| 
+          create(:city, name: "common", country_id: c.id)
+        }
+      }
+
+      get "/v1/areas/common", params: { only: "countries" }
+      json.each do |area|
+        expect(area["type"]).to eq("country")
+      end
+    end
   end
   
   describe "> Areas [GET]" do
