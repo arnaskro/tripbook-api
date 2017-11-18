@@ -15,7 +15,6 @@ FactoryBot.define do
     available_to "2017-12-05"
     description "Something about me"
     quote "I know some places"
-    country
     city
   end
 end

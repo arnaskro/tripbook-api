@@ -14,7 +14,7 @@ class V1::LocalsController < ApiController
     # Filter by query
     locals = locals.search(params[:query]) if params[:query]
     # Filter by country
-    locals = locals.where(country_id: params[:country_id]) if params[:country_id]
+    locals = locals.joins(:city).where("cities.country_id LIKE ?", params[:country_id]) if params[:country_id]
     # Filter by city
     locals = locals.where(city_id: params[:city_id]) if params[:city_id]
     
@@ -85,7 +85,7 @@ class V1::LocalsController < ApiController
     end
 
     def local_params
-      params.require(:local).permit(:description, :quote, :available, :available_from, :available_to, :country_id, :city_id)
+      params.require(:local).permit(:description, :quote, :available, :available_from, :available_to, :city_id)
     end
 
 end
