@@ -55,7 +55,8 @@ class V1::TripsController < ApiController
     if @trip.meetings.size > 0
       render json: { error: "A trip cannot be deleted because it has meetings!" }, status: 400
     else
-      render status: 200
+      @trip.delete
+      render json: {}, status: 200
     end
   end
 
