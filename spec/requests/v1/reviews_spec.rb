@@ -6,7 +6,7 @@ describe "Reviews Module" do
     @city = create(:city, country: @country)
     @user = create(:user)
 
-    @local = create(:local, user: create(:user), country: @country, city: @city)
+    @local = create(:local, user: create(:user), city: @city)
     @local_review = create(:review_local, user: @user, object: @local)
 
     @trip = create(:trip)
@@ -89,6 +89,16 @@ describe "Reviews Module" do
       expect(response.status).to eq(200)
       expect(Review.where(id: @trip_review.id).first).to be_nil
     end
+  end
+
+  it "returns a bad request response of object type is invalid" do
+    get "/v1/reviews/ahbdshabsd/1"
+    expect(response.status).to eq(400)
+  end
+
+  it "returns an empty list object doesnt not exist or is null" do
+    get "/v1/reviews/local/1132323232323"
+    expect(json["reviews"].length).to eq(0)
   end
 
 end
