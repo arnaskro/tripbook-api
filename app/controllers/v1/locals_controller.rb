@@ -85,7 +85,7 @@ class V1::LocalsController < ApiController
     end
 
     def local_params
-      params.require(:local).permit(:description, :quote, :available, :available_from, :available_to, :city_id)
+      params.require(:local).permit(:description, :quote, :available, :city_id)
     end
 
 end
