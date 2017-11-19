@@ -17,6 +17,9 @@ Rails.application.routes.draw do
     resources :locals, only: [:index, :show, :create, :update, :destroy]
     # Trips
     resources :trips, only: [:index, :show, :create, :update, :destroy]
+    
+    get 'trip_offers' => 'trips#index', trip_type: 1
+
     # Bookings
     resources :bookings, only: [:index, :show, :create, :update]
     # Messages

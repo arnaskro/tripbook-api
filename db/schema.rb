@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171118145026) do
+ActiveRecord::Schema.define(version: 20171119164814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 20171118145026) do
     t.string "title"
     t.string "description"
     t.integer "trip_status"
-    t.integer "trip_type"
+    t.integer "trip_type", default: 0
     t.integer "number_of_people", default: 1
     t.date "from_date"
     t.date "to_date"
