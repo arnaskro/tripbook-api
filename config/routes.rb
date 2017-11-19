@@ -15,10 +15,16 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :show, :update, :destroy]
     # Locals
     resources :locals, only: [:index, :show, :create, :update, :destroy]
-    # Trips
-    resources :trips, only: [:index, :show, :create, :update, :destroy]
-    
-    get 'trip_offers' => 'trips#index', trip_type: 1
+
+    # --- Trips START
+      # Trips requests
+      resources :trips, only: [:index, :show, :create, :update, :destroy]
+
+      # Trip offers
+      get 'trip_offers' => 'trips#index', trip_type: 1
+      post 'trip_offers' => 'trips#create', trip_type: 1
+      delete 'trip_offers' => 'trips#destroy', trip_type: 1
+    # --- Trips END
 
     # Bookings
     resources :bookings, only: [:index, :show, :create, :update]
