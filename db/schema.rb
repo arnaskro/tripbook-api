@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171119164814) do
+ActiveRecord::Schema.define(version: 20171119175731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,7 +102,9 @@ ActiveRecord::Schema.define(version: 20171119164814) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "city_id"
+    t.bigint "local_id"
     t.index ["city_id"], name: "index_trips_on_city_id"
+    t.index ["local_id"], name: "index_trips_on_local_id"
     t.index ["user_id"], name: "index_trips_on_user_id"
   end
 
@@ -139,5 +141,6 @@ ActiveRecord::Schema.define(version: 20171119164814) do
   add_foreign_key "messages", "conversation_participants"
   add_foreign_key "reviews", "users"
   add_foreign_key "trips", "cities"
+  add_foreign_key "trips", "locals"
   add_foreign_key "trips", "users"
 end
