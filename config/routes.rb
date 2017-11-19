@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       # Trip offers
       get 'trip_offers' => 'trips#index', trip_type: 1
       post 'trip_offers' => 'trips#create', trip_type: 1
+      put 'trip_offers' => 'trips#update', trip_type: 1
+      patch 'trip_offers' => 'trips#update', trip_type: 1
       delete 'trip_offers' => 'trips#destroy', trip_type: 1
     # --- Trips END
 
