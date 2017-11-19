@@ -1,6 +1,7 @@
 class V1::TripsController < ApiController
-  before_action :get_trip, only: [:show, :update, :destroy]
   before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
+  before_action :check_if_has_permissions, only: [:create, :update, :destroy]
+  before_action :get_trip, only: [:show, :update, :destroy]
 
   # [GET] Trips (city_id, country_id, local_id, trip_type)
   def index
@@ -37,7 +38,6 @@ class V1::TripsController < ApiController
 
   def update
     if @trip.update(trip_params)
-
       render json: @trip, status: 201
     else
       render json: @trip.errors.full_messages, status: 422
@@ -54,6 +54,15 @@ class V1::TripsController < ApiController
   end
 
   private
+
+    def check_if_has_permissions
+
+      # Check if trip type is offer and if the user isnt a local
+      if params[:trip_type] == 1 && !current_v1_user.has_local?
+        (render json: {}, status: 404 and return)
+      end
+
+    end
 
     def get_trip
       @trip = Trip.find(params[:id])
