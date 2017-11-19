@@ -27,12 +27,14 @@ describe "Auth API" do
 
   it 'registers an account successfully with valid data' do
     email = "abc@new.com"
+    name = "Bob"
     # make the request
-    post "/v1/auth/", params: { email: email, password: "123123", name: "Bob" }
+    post "/v1/auth/", params: { email: email, password: "123123", name: name}
     # Unprocessable entity
     expect(response).to be_success
     expect(json["data"]["id"]).to be_instance_of(Integer)
     expect(json["data"]["email"]).to eq("abc@new.com")
+    expect(json["data"]["name"]).to eq(name)
   end
 
   it 'does not register an account when data is missing' do

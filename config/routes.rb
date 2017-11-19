@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  get 'helloworld' => 'api#hello_world'
 
   namespace :v1 do
+    
     mount_devise_token_auth_for 'User', at: 'auth'
     get 'test_auth' => 'test#members_only'
     # Areas
@@ -17,8 +17,8 @@ Rails.application.routes.draw do
     resources :locals, only: [:index, :show, :create, :update, :destroy]
     # Trips
     resources :trips, only: [:index, :show, :create, :update, :destroy]
-    # Meetings
-    resources :meetings, only: [:index, :show, :create, :update]
+    # Bookings
+    resources :bookings, only: [:index, :show, :create, :update]
     # Messages
     resources :conversations, only: [:index, :show, :create]
     get 'conversations/:id' => 'conversations#show', as: :get_messages # Add :Date param for older messages

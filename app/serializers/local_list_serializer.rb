@@ -18,4 +18,6 @@ class LocalListItemSerializer < LocalSerializer
     v1_local_path(id: object.id)
   end
 
+  
+
 end

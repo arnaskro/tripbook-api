@@ -4,11 +4,11 @@ class Trip < ApplicationRecord
   has_one :local, through: :user
   # Areas
   has_many :trip_destinations
-  has_many :cities, through: :trip_destinations 
-  has_many :countries, through: :cities 
-  # Meetings & Users
-  has_many :meetings
-  has_many :users, through: :meetings
+  has_one :city
+  has_one :country, through: :city 
+  # bookings & Users
+  has_many :bookings
+  has_many :users, through: :bookings
   # Reviews
   has_many :reviews, as: :object
 

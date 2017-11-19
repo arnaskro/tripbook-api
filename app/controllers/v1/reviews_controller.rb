@@ -4,17 +4,26 @@ class V1::ReviewsController < ApiController
 
   # [GET] /v1/reviews/:object_type/:object_id
   def index
-    # Get reviews
-    reviews = @object.reviews
-    # Paginate
-    reviews = reviews.page(params[:page] || 1).per(params[:per_page] || 10)
-
-    render json: {
-      reviews: reviews,
-      total: reviews.total_count,
-      page: reviews.current_page,
-      per_page: reviews.limit_value
-    }
+    if !@object.nil?
+      # Get reviews
+      reviews = @object.reviews
+      # Paginate
+      reviews = reviews.page(params[:page] || 1).per(params[:per_page] || 10)
+    
+      render json: {
+        reviews: reviews,
+        total: reviews.total_count,
+        page: reviews.current_page,
+        per_page: reviews.limit_value
+      }
+    else
+      render json: {
+        reviews: [],
+        total: 0,
+        page: 1,
+        per_page: 10
+      }
+    end
   end
 
   # [POST] /v1/reviews/:object_type/:object_id
@@ -47,10 +56,10 @@ class V1::ReviewsController < ApiController
   private
 
     def get_object
-      if params[:object_type]
+      if  params[:object_id] && (params[:object_type].downcase === "local" || params[:object_type].downcase === "city" || params[:object_type].downcase === "trip")
         @object = params[:object_type].downcase.classify.constantize.where(id: params[:object_id]).first
       else
-        render json: { error: "Object doesn't not exist!" }, status: 400 and return
+        render json: { error: "#{params[:object_type]} is not a valid type" }, status: 400 and return
       end
     end
 

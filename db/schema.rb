@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171112111136) do
+ActiveRecord::Schema.define(version: 20171118145026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bookings", force: :cascade do |t|
+    t.bigint "trip_id"
+    t.bigint "user_id"
+    t.date "from_date"
+    t.date "to_date"
+    t.integer "number_of_people"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["trip_id"], name: "index_bookings_on_trip_id"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+  end
 
   create_table "cities", force: :cascade do |t|
     t.string "name"
@@ -51,24 +64,11 @@ ActiveRecord::Schema.define(version: 20171112111136) do
     t.integer "user_id"
     t.boolean "available", default: false
     t.boolean "active", default: true
-    t.date "available_from"
-    t.date "available_to"
     t.string "description"
     t.string "quote"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "city_id"
-    t.integer "country_id"
-  end
-
-  create_table "meetings", force: :cascade do |t|
-    t.bigint "trip_id"
-    t.bigint "user_id"
-    t.date "meeting_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["trip_id"], name: "index_meetings_on_trip_id"
-    t.index ["user_id"], name: "index_meetings_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -90,15 +90,6 @@ ActiveRecord::Schema.define(version: 20171112111136) do
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
-  create_table "trip_destinations", force: :cascade do |t|
-    t.bigint "trip_id"
-    t.bigint "city_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["city_id"], name: "index_trip_destinations_on_city_id"
-    t.index ["trip_id"], name: "index_trip_destinations_on_trip_id"
-  end
-
   create_table "trips", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -110,6 +101,8 @@ ActiveRecord::Schema.define(version: 20171112111136) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_trips_on_city_id"
     t.index ["user_id"], name: "index_trips_on_user_id"
   end
 
@@ -139,13 +132,12 @@ ActiveRecord::Schema.define(version: 20171112111136) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "bookings", "trips"
+  add_foreign_key "bookings", "users"
   add_foreign_key "conversation_participants", "conversations"
   add_foreign_key "conversation_participants", "users"
-  add_foreign_key "meetings", "trips"
-  add_foreign_key "meetings", "users"
   add_foreign_key "messages", "conversation_participants"
   add_foreign_key "reviews", "users"
-  add_foreign_key "trip_destinations", "cities"
-  add_foreign_key "trip_destinations", "trips"
+  add_foreign_key "trips", "cities"
   add_foreign_key "trips", "users"
 end

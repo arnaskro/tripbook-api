@@ -12,9 +12,9 @@ class User < ActiveRecord::Base
   include Searchable
   
   has_one :local
-  # Meetings & trips
-  has_many :meetings
-  has_many :scheduled_trips, through: :meetings 
+  # Bookings & trips
+  has_many :bookings
+  has_many :trips, through: :bookings 
   has_many :trips
   # Messages
   has_many :conversation_participants
@@ -43,6 +43,10 @@ class User < ActiveRecord::Base
 
   def get_local_id
     local ? local.id : nil
+  end
+
+  def has_local?
+    return !local.nil? && local.active
   end
 
 end
