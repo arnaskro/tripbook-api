@@ -63,8 +63,9 @@ class V1::TripsController < ApiController
       # If a user is a local, then get the city id from the local model, instead of getting it from the params
       params[:trip][:city_id] = current_v1_user.local.city_id if current_v1_user.has_local?
 
+
       # strong parameters. we specify what paremeters do we need for the trips
-      return params.require(:trip).permit(:user_id, :title, :description, :trip_status, :trip_type, :number_of_people, :from_date, :to_date, :city_id)
+      return params.require(:trip).permit(:user_id, :title, :description, :number_of_people, :from_date, :to_date, :city_id)
     end
     
 end

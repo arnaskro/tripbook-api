@@ -17,7 +17,6 @@ class V1::LocalsController < ApiController
     locals = locals.joins(:city).where("cities.country_id LIKE ?", params[:country_id]) if params[:country_id]
     # Filter by city
     locals = locals.where(city_id: params[:city_id]) if params[:city_id]
-
     # Filter by availability
     locals = locals.where(available: true) if params[:available]
     
