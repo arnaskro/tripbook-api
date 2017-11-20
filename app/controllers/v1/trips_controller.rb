@@ -2,17 +2,14 @@ class V1::TripsController < ApiController
   before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
   before_action :get_trip, only: [:show, :update, :destroy]
 
-  # [GET] Trips (city_id, country_id, local_id, trip_type)
+  # [GET] Trips (city_id, country_id, trip_type)
   def index
-    trips = Trip.all
-    # (optional) Get trips for the trip type
-    trips = trips.where(trip_type: params[:trip_type]) if params[:trip_type]
+    # Get trips for the trip type
+    trips = Trip.all.where(trip_type: params[:trip_type] || 2)
     # (optional) if city_id params was provided
     trips = trips.joins(:city).where("cities.id = ?", params[:city_id]) if params[:city_id]
     # (optional) if country_id params was provided
     trips = trips.joins(:city => :country).where("countries.id = ?", params[:country_id]) if params[:country_id]
-    # (optional) if local_id params was provided
-    trips = trips.joins(:local).where("locals.id = ?", params[:local_id]) if params[:local_id]
     # Paginate
     trips = trips.page(params[:page] || 1).per(params[:per_page] || 20)
 
@@ -30,7 +27,7 @@ class V1::TripsController < ApiController
 
   def create
     # Stop action if user is not a local
-    (render json: {}, status: 401 and return) if !current_v1_user.has_local? 
+    (render json: {}, status: 401 and return) if !current_v1_user.has_local
 
     # Create trip
     trip = Trip.create(trip_params)
