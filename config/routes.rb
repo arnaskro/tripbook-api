@@ -18,7 +18,8 @@ Rails.application.routes.draw do
     # Trips
     resources :trips, only: [:index, :show, :create, :update, :destroy]
     # Bookings
-    resources :bookings, only: [:index, :show, :create, :update]
+    post 'bookings/:id/:new_status' => 'bookings#update'
+    resources :bookings, only: [:index, :show, :create]
     # Messages
     resources :conversations, only: [:index, :show, :create]
     get 'conversations/:id' => 'conversations#show', as: :get_messages # Add :Date param for older messages
