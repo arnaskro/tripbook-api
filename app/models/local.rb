@@ -4,6 +4,8 @@ class Local < ApplicationRecord
   # Reviews
   has_many :reviews, as: :object
   has_one :country, through: :city
+  has_many :trips
+  has_many :bookings, through: :trips
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }

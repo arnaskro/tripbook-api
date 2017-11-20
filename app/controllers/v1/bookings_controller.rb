@@ -1,20 +1,27 @@
 class V1::BookingsController < ApiController
   before_action :get_booking, only: [:show, :update]
-  before_action :authenticate_v1_user!, only: [:create, :update]
+  before_action :authenticate_v1_user!, only: [:index, :create, :update]
 
-  # [GET] bookings (trip_id, user_id, local_id)
+  # [GET] bookings
   def index
-    bookings = Booking.all
-    # (optional) if trip_id params was provided
-    bookings = bookings.joins(:trip).where("trips.id = ?", params[:trip_id]) if params[:trip_id]
-    # (optional) if user_id params was provided
-    bookings = bookings.joins(:user).where("users.id = ?", params[:user_id]) if params[:user_id]
-    # (optional) if local_id params was provided
-    bookings = bookings.joins(:local).where("locals.id = ?", params[:local_id]) if params[:local_id]
+    # if user is not a local get only his bookings
+    if !current_v1_user.has_local?
+      bookings = current_v1_user.bookings
+    else
+      # otherwise get his bookings and trip bookings
+      bookings = Booking.joins(:trip)
+      bookings = bookings.where('bookings.user_id = ?', current_v1_user.id).or(bookings.where('bookings.local_id IS NOT NULL AND bookings.local_id = ?', current_v1_user.get_local_id)).or(bookings.where('trips.local_id = ?', current_v1_user.get_local_id))
+    end
+
     # Paginate
     bookings = bookings.page(params[:page] || 1).per(params[:per_page] || 20)
 
-    render json: bookings
+      render json: {
+        bookings: bookings,
+        total: bookings.total_count,
+        page: bookings.current_page,
+        per_page: bookings.limit_value
+      }
   end
 
   def create
@@ -32,11 +39,13 @@ class V1::BookingsController < ApiController
   end
 
   def update
-    if @booking.update(booking_params)
-      render json: @booking, status: 200
-    else
-      render json: @booking.errors.full_messages, status: 422
-    end
+    # if @booking.update(booking_params)
+    #   render json: @booking, status: 200
+    # else
+    #   render json: @booking.errors.full_messages, status: 422
+    # end
+    
+    render json: nil, status: 200
   end
 
   private
