@@ -1,8 +1,8 @@
 class Trip < ApplicationRecord
   belongs_to :user
-  belongs_to :local, required: false
   belongs_to :city, required: false
   
+  has_one :local, through: :user
   has_one :country, through: :city 
   has_many :bookings
   has_many :users, through: :bookings
