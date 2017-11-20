@@ -1,5 +1,4 @@
 class V1::BookingsController < ApiController
-  before_action :get_booking, only: [:show, :update]
   before_action :authenticate_v1_user!, only: [:index, :create, :update]
 
   # [GET] bookings
@@ -25,17 +24,66 @@ class V1::BookingsController < ApiController
   end
 
   def create
-    booking = Booking.new(booking_params)
 
-    if booking.save
-      render json: booking, status: 201
+    # Create the trip if needed
+    if booking_params[:trip_id].nil?
+
+      # Check if public request
+      if trip_params[:city_id].nil?
+        trip = Trip.create(
+          user: Local.find(trip_params[:local_id]).user,
+          title: trip_params[:title],
+          description: trip_params[:description],
+          city_id: Local.find(trip_params[:local_id]).city_id,
+          number_of_people: booking_params[:number_of_people],
+          from_date: booking_params[:from_date],
+          to_date: booking_params[:to_date],
+          trip_type: 0 #0 is private request
+        )
+      else
+        trip = Trip.create(
+          user: current_v1_user,
+          title: trip_params[:title],
+          description: trip_params[:description],
+          city_id: trip_params[:city_id],
+          number_of_people: booking_params[:number_of_people],
+          from_date: booking_params[:from_date],
+          to_date: booking_params[:to_date],
+          trip_type: 1 #1 is public request
+        )
+      end
     else
-      render json: booking.errors.full_messages, status: 422
+      trip = Trip.find(booking_params[:trip_id])
     end
-  end
+    
+    # Check if trip is valid
+    if trip.valid?
 
-  def show
-    render json: @booking
+      # Create booking
+      booking = Booking.new(
+          booking_params.merge(
+            trip_id: trip.id,
+            user: current_v1_user,
+            status: 1,
+            local_id: booking_params[:trip_id] ? trip.local_id : trip_params[:local_id] # if trip was provided then use the trip local id otherwise we should have a local_id provided in the trip paramters
+          )
+        )
+
+      if booking.save
+        render json: {
+          booking: booking,
+          trip: {
+            id: trip.id,
+            url: v1_trips_path(id: trip.id)
+          }
+        }, status: 201
+      else
+        render json: booking.errors.full_messages, status: 401
+      end
+
+    else
+      render json: trip.errors.full_messages, status: 405 and return
+    end
   end
 
   def update
@@ -50,12 +98,12 @@ class V1::BookingsController < ApiController
 
   private
 
-    def get_booking
-      @booking = Booking.find(params[:id])
+    def booking_params
+      params.require(:booking).permit(:trip_id, :from_date, :to_date, :number_of_people, :local_id, :city_id)
     end
 
-    def booking_params
-      params.require(:booking).permit(:trip_id, :user_id, :from_date, :to_date, :number_of_people, :status)
+    def trip_params
+      params.require(:trip).permit(:title, :description, :local_id, :city_id)
     end
     
 end

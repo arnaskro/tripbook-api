@@ -17,7 +17,7 @@ describe 'Trips & Bookings Module' do
           booking: {
             from_date: '2018-05-07',
             to_date: '2018-05-09',
-            number_of_people: '4'
+            number_of_people: 4
           },
           trip: {
             title: "2 day trip in #{@city.name}",
@@ -35,11 +35,10 @@ describe 'Trips & Bookings Module' do
         expect(json["trip"]["url"]).not_to be_nil
         trip = Trip.find(json["trip"]["id"])
         expect(trip).not_to be_nil
-        expect(trip.trip_type).to eq(1)
-        expect(trip.title).to eq(@parameters["trip"]["title"])
-        expect(trip.description).to eq(@parameters["trip"]["description"])
-        expect(trip.number_of_people).to eq(@parameters["booking"]["number_of_people"])
-        expect(trip.local_id).to eq(@local.id)
+        expect(trip.trip_type).to eq(0) #Expect to be private
+        expect(trip.title).to eq(@parameters[:trip][:title])
+        expect(trip.description).to eq(@parameters[:trip][:description])
+        expect(trip.number_of_people).to eq(@parameters[:booking][:number_of_people])
         expect(trip.city_id).to eq(@local.city_id)
         expect(trip.bookings.size).to eq(1)
       end
@@ -53,9 +52,10 @@ describe 'Trips & Bookings Module' do
         expect(booking).not_to be_nil
         expect(booking.trip).not_to be_nil
         expect(booking.local).not_to be_nil
+        expect(booking.local_id).to eq(@local.id)
         expect(booking.local.city_id).to eq(@city.id)
         expect(booking.trip.city_id).to eq(@local.city_id)
-        expect(booking.number_of_people).to eq(@parameters["booking"]["number_of_people"])
+        expect(booking.number_of_people).to eq(@parameters[:booking][:number_of_people])
         expect(booking.status).to eq(1) #Pending
       end
     end
@@ -66,7 +66,7 @@ describe 'Trips & Bookings Module' do
           booking: {
             from_date: '2018-05-07',
             to_date: '2018-05-09',
-            number_of_people: '4'
+            number_of_people: 4
           },
           trip: {
             title: "2 day trip in #{@city.name}",
@@ -85,9 +85,9 @@ describe 'Trips & Bookings Module' do
         trip = Trip.find(json["trip"]["id"])
         expect(trip).not_to be_nil
         expect(trip.trip_type).to eq(1)
-        expect(trip.title).to eq(@parameters["trip"]["title"])
-        expect(trip.description).to eq(@parameters["trip"]["description"])
-        expect(trip.number_of_people).to eq(@parameters["booking"]["number_of_people"])
+        expect(trip.title).to eq(@parameters[:trip][:title])
+        expect(trip.description).to eq(@parameters[:trip][:description])
+        expect(trip.number_of_people).to eq(@parameters[:booking][:number_of_people])
         expect(trip.city_id).to eq(@city.id)
         expect(trip.bookings.size).to eq(1)
       end
@@ -102,7 +102,7 @@ describe 'Trips & Bookings Module' do
         expect(booking.trip).not_to be_nil
         expect(booking.local).to be_nil
         expect(booking.trip.city_id).to eq(@city.id)
-        expect(booking.number_of_people).to eq(@parameters["booking"]["number_of_people"])
+        expect(booking.number_of_people).to eq(@parameters[:booking][:number_of_people])
         expect(booking.status).to eq(1) #Pending
       end
     end
