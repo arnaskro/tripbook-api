@@ -65,7 +65,7 @@ class V1::BookingsController < ApiController
             trip_id: trip.id,
             user: current_v1_user,
             status: 1,
-            local_id: (booking_params[:trip_id] ? trip.local_id : trip_params[:local_id]) # if trip was provided then use the trip local id otherwise we should have a local_id provided in the trip parameters
+            local_id: booking_params[:trip_id] ? trip.local.id : trip_params[:local_id] # if trip was provided then use the trip local id otherwise we should have a local_id provided in the trip parameters
           )
         )
 
