@@ -65,7 +65,7 @@ class V1::BookingsController < ApiController
             trip_id: trip.id,
             user: current_v1_user,
             status: 1,
-            local_id: booking_params[:trip_id] ? trip.local_id : trip_params[:local_id] # if trip was provided then use the trip local id otherwise we should have a local_id provided in the trip paramters
+            local_id: (booking_params[:trip_id] ? trip.local_id : trip_params[:local_id]) # if trip was provided then use the trip local id otherwise we should have a local_id provided in the trip parameters
           )
         )
 
@@ -87,13 +87,25 @@ class V1::BookingsController < ApiController
   end
 
   def update
-    # if @booking.update(booking_params)
-    #   render json: @booking, status: 200
-    # else
-    #   render json: @booking.errors.full_messages, status: 422
-    # end
+    # Find the booking
+    booking = Booking.find(params[:id])
     
-    render json: nil, status: 200
+    # Set status
+    case params[:new_status].downcase
+    when "accept"
+      new_status = 2
+    when "deny"
+    when "cancel"
+      new_status = 0
+    else
+      new_status = 1
+    end
+
+    if booking.update(status: new_status)
+      render json: booking, status: 200
+    else
+      render json: booking.errors.full_messages, status: 422
+    end
   end
 
   private
