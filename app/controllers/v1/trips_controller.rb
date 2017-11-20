@@ -1,6 +1,5 @@
 class V1::TripsController < ApiController
   before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
-  before_action :check_if_has_permissions, only: [:create, :update, :destroy]
   before_action :get_trip, only: [:show, :update, :destroy]
 
   # [GET] Trips (city_id, country_id, local_id, trip_type)
@@ -25,6 +24,9 @@ class V1::TripsController < ApiController
   end
 
   def create
+    # Stop action if user is not a local
+    (render json: {}, status: 401 and return) if !current_v1_user.has_local? 
+
     # Create trip
     trip = Trip.create(trip_params)
 
@@ -55,28 +57,13 @@ class V1::TripsController < ApiController
 
   private
 
-    def check_if_has_permissions
-
-      # Check if trip type is offer and if the user isnt a local
-      if params[:trip_type] == 1 && !current_v1_user.has_local?
-        (render json: {}, status: 404 and return)
-      end
-
-    end
-
     def get_trip
       @trip = Trip.find(params[:id])
     end
 
     def trip_params
-      # If a user is a local, then get the city id from the local model, instead of getting it from the params
-      params[:trip][:city_id] = current_v1_user.local.city_id if current_v1_user.has_local?
-
-      # Get the trip type if is set. By default it will fallback to 0.
-      params[:trip][:trip_type] = params[:trip_type] unless params[:trip_type].nil?
-
-      # strong parameters. we specify what paremeters do we need for the trips
-      return params.require(:trip).permit(:user_id, :title, :description, :number_of_people, :from_date, :to_date, :city_id)
+      # strong parameters. we specify what paremeters do we need for the trips and add additional ones that we need
+      return params.require(:trip).permit(:title, :description, :number_of_people, :from_date, :to_date).merge(user_id: current_v1_user.id, city_id: current_v1_user.local.city_id, trip_type: 2)
     end
     
 end

@@ -122,10 +122,10 @@ describe 'Trips & Bookings Module' do
         post "/v1/trips", params: @parameters, headers: @local.user.create_new_auth_token 
 
         expect(response.status).to eq(201)
-        expect(json["trip"]["id"]).not_to be_nil
-        expect(json["trip"]["url"]).not_to be_nil
+        expect(json["id"]).not_to be_nil
+        expect(json["url"]).not_to be_nil
 
-        trip = Trip.find(json["trip"]["id"])
+        trip = Trip.find(json["id"])
         expect(trip.bookings.size).to eq(0)
         expect(trip.trip_type).to eq(2)
         expect(trip.user).to eq(@local.user)
