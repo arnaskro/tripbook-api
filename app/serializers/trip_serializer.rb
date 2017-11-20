@@ -11,6 +11,6 @@ class TripSerializer < ActiveModel::Serializer
   end
 
   attribute :url do
-    v1_trips_path(id: object.id)
+    v1_trip_path(id: object.id)
   end
 end

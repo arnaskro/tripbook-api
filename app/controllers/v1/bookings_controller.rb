@@ -4,7 +4,7 @@ class V1::BookingsController < ApiController
   # [GET] bookings
   def index
     # if user is not a local get only his bookings
-    if !current_v1_user.has_local?
+    if !current_v1_user.has_local
       bookings = current_v1_user.bookings
     else
       # otherwise get his bookings and trip bookings
