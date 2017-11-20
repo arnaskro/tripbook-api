@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171118145026) do
+ActiveRecord::Schema.define(version: 20171120152032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,9 +21,11 @@ ActiveRecord::Schema.define(version: 20171118145026) do
     t.date "from_date"
     t.date "to_date"
     t.integer "number_of_people"
-    t.integer "status"
+    t.integer "status", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "local_id"
+    t.index ["local_id"], name: "index_bookings_on_local_id"
     t.index ["trip_id"], name: "index_bookings_on_trip_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -93,8 +95,7 @@ ActiveRecord::Schema.define(version: 20171118145026) do
   create_table "trips", force: :cascade do |t|
     t.string "title"
     t.string "description"
-    t.integer "trip_status"
-    t.integer "trip_type"
+    t.integer "trip_type", default: 0
     t.integer "number_of_people", default: 1
     t.date "from_date"
     t.date "to_date"
@@ -132,6 +133,7 @@ ActiveRecord::Schema.define(version: 20171118145026) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "bookings", "locals"
   add_foreign_key "bookings", "trips"
   add_foreign_key "bookings", "users"
   add_foreign_key "conversation_participants", "conversations"

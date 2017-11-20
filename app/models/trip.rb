@@ -1,17 +1,18 @@
 class Trip < ApplicationRecord
-  # User
   belongs_to :user
+  belongs_to :city, required: false
+  
   has_one :local, through: :user
-  # Areas
-  has_many :trip_destinations
-  has_one :city
   has_one :country, through: :city 
-  # bookings & Users
   has_many :bookings
   has_many :users, through: :bookings
-  # Reviews
   has_many :reviews, as: :object
 
-  validates :user, :title, :description, :trip_status, :trip_type, presence: true
+  validates :user, :title, :description, :trip_type, presence: true
+
+  ####### Trip types
+  # 0 - Private Trip request (default)
+  # 1 - Public Trip request 
+  # 2 - Trip offer 
 
 end

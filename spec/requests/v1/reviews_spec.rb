@@ -9,7 +9,7 @@ describe "Reviews Module" do
     @local = create(:local, user: create(:user), city: @city)
     @local_review = create(:review_local, user: @user, object: @local)
 
-    @trip = create(:trip)
+    @trip = create(:trip, city: @city)
     @trip_review = create(:review_trip, user: @user, object: @trip)
   end
 

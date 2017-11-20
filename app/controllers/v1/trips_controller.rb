@@ -1,6 +1,6 @@
 class V1::TripsController < ApiController
-  before_action :get_trip, only: [:show, :update, :destroy]
   before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
+  before_action :get_trip, only: [:show, :update, :destroy]
 
   # [GET] Trips (city_id, country_id, local_id, trip_type)
   def index
@@ -24,6 +24,9 @@ class V1::TripsController < ApiController
   end
 
   def create
+    # Stop action if user is not a local
+    (render json: {}, status: 401 and return) if !current_v1_user.has_local? 
+
     # Create trip
     trip = Trip.create(trip_params)
 
@@ -37,7 +40,6 @@ class V1::TripsController < ApiController
 
   def update
     if @trip.update(trip_params)
-
       render json: @trip, status: 201
     else
       render json: @trip.errors.full_messages, status: 422
@@ -60,11 +62,8 @@ class V1::TripsController < ApiController
     end
 
     def trip_params
-      # If a user is a local, then get the city id from the local model, instead of getting it from the params
-      params[:trip][:city_id] = current_v1_user.local.city_id if current_v1_user.has_local?
-
-      # strong parameters. we specify what paremeters do we need for the trips
-      return params.require(:trip).permit(:user_id, :title, :description, :trip_status, :trip_type, :number_of_people, :from_date, :to_date, :city_id)
+      # strong parameters. we specify what paremeters do we need for the trips and add additional ones that we need
+      return params.require(:trip).permit(:title, :description, :number_of_people, :from_date, :to_date).merge(user_id: current_v1_user.id, city_id: current_v1_user.local.city_id, trip_type: 2)
     end
     
 end

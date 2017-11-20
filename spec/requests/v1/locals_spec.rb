@@ -30,19 +30,19 @@ describe 'Locals Module' do
       expect(json["locals"][0]['id'] != nil).to be true
     end
     
-      it "locals list should only include the available locals when 'available' params is set to true" do
-        local = create(:local, user: create(:user, name:"notavailable1", email:"notavailable1@demo.dk"), city_id: @city1.id, available: false)
-        local = create(:local, user: create(:user, name:"available1", email:"available1@demo.dk"), city_id: @city1.id, available: true)
-        get '/v1/locals', params: { available: true }
-        expect(json["total"]).to eq(Local.where(available: true).count)
-      end
-          
-      it "locals list should only return all locals when 'available' param is not set"  do
-        local = create(:local, user: create(:user, name:"notavailable1", email:"notavailable1@demo.dk"), city_id: @city1.id, available: false)
-        local = create(:local, user: create(:user, name:"available1", email:"available1@demo.dk"), city_id: @city1.id, available: true)
-        get '/v1/locals'
-        expect(json["total"]).to eq(Local.count)
-      end
+    it "locals list should only include the available locals when 'available' params is set to true" do
+      local = create(:local, user: create(:user, name:"notavailable1", email:"notavailable1@demo.dk"), city_id: @city1.id, available: false)
+      local = create(:local, user: create(:user, name:"available1", email:"available1@demo.dk"), city_id: @city1.id, available: true)
+      get '/v1/locals', params: { available: true }
+      expect(json["total"]).to eq(Local.where(available: true).count)
+    end
+        
+    it "locals list should only return all locals when 'available' param is not set"  do
+      local = create(:local, user: create(:user, name:"notavailable1", email:"notavailable1@demo.dk"), city_id: @city1.id, available: false)
+      local = create(:local, user: create(:user, name:"available1", email:"available1@demo.dk"), city_id: @city1.id, available: true)
+      get '/v1/locals'
+      expect(json["total"]).to eq(Local.count)
+    end
 
     it "should be possible to get a list of locals for a certain city" do
       get "/v1/locals?city_id=#{@city1.id}"
@@ -50,6 +50,12 @@ describe 'Locals Module' do
       expect(json["total"]).to eq(20)
     end
 
+    it "should be possible to get a list of locals for a certain country" do
+      get "/v1/locals?country_id=#{@country1.id}"
+      expect(json["locals"].length > 0).to be true
+      expect(json["total"]).to eq(30)
+    end
+  
     it "should be possible to paginate a list of locals" do
       get "/v1/locals"
       expect(json["total"]).to eq(30)
