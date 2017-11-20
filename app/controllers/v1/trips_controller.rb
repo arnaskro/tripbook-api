@@ -8,15 +8,20 @@ class V1::TripsController < ApiController
     # (optional) Get trips for the trip type
     trips = trips.where(trip_type: params[:trip_type]) if params[:trip_type]
     # (optional) if city_id params was provided
-    trips = trips.joins(:cities).where("cities.id = ?", params[:city_id]) if params[:city_id]
+    trips = trips.joins(:city).where("cities.id = ?", params[:city_id]) if params[:city_id]
     # (optional) if country_id params was provided
-    trips = trips.joins(:countries).where("countries.id = ?", params[:country_id]) if params[:country_id]
+    trips = trips.joins(:city => :country).where("countries.id = ?", params[:country_id]) if params[:country_id]
     # (optional) if local_id params was provided
     trips = trips.joins(:local).where("locals.id = ?", params[:local_id]) if params[:local_id]
     # Paginate
     trips = trips.page(params[:page] || 1).per(params[:per_page] || 20)
 
-    render json: trips
+    render json: {
+      trips: trips,
+      total: trips.total_count,
+      page: trips.current_page,
+      per_page: trips.limit_value
+    }
   end
 
   def show
