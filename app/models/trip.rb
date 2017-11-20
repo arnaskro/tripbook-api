@@ -11,7 +11,8 @@ class Trip < ApplicationRecord
   validates :user, :title, :description, :trip_type, presence: true
 
   ####### Trip types
-  # 0 - Trip request (default)
-  # 1 - Trip offer
+  # 0 - Private Trip request (default)
+  # 1 - Public Trip request 
+  # 2 - Trip offer 
 
 end
