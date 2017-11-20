@@ -53,7 +53,7 @@ describe 'Locals Module' do
     it "should be possible to get a list of locals for a certain country" do
       get "/v1/locals?country_id=#{@country1.id}"
       expect(json["locals"].length > 0).to be true
-      expect(json["total"]).to eq(20)
+      expect(json["total"]).to eq(30)
     end
   
     it "should be possible to paginate a list of locals" do
