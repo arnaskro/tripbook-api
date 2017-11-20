@@ -8,8 +8,8 @@ class V1::BookingsController < ApiController
       bookings = current_v1_user.bookings
     else
       # otherwise get his bookings and trip bookings
-      bookings = Booking.joins(:trip)
-      bookings = bookings.where('bookings.user_id = ?', current_v1_user.id).or(bookings.where('bookings.local_id IS NOT NULL AND bookings.local_id = ?', current_v1_user.get_local_id)).or(bookings.where('trips.local_id = ?', current_v1_user.get_local_id))
+      bookings = Booking.joins(:trip => { :user => :local })
+      bookings = bookings.where('bookings.user_id = ?', current_v1_user.id).or(bookings.where('bookings.local_id IS NOT NULL AND bookings.local_id = ?', current_v1_user.get_local_id)).or(bookings.where('locals.id = ?', current_v1_user.get_local_id))
     end
 
     # Paginate
