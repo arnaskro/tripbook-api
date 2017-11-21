@@ -15,15 +15,9 @@ class V1::TripsController < ApiController
       
       case params[:sort].downcase
       when 'popularity' # by number of bookings
-        trips = trips
-                .joins(:bookings)
-                .group('trips.id')
-                .order('count(bookings.id) DESC NULLS LAST')
+        trips = trips.most_popular
       when 'rating' # by rating of reviews
-        trips = trips
-                .joins(:reviews)
-                .group('trips.id')
-                .order('count(reviews.id) DESC NULLS LAST')
+        trips = trips.best_rated
       end
 
     end
@@ -31,7 +25,7 @@ class V1::TripsController < ApiController
     trips = trips.page(params[:page] || 1).per(params[:per_page] || 20)
 
     render json: {
-      trips: trips,
+      trips: ActiveModelSerializers::SerializableResource.new(trips, each_serializer: TripSerializer),
       total: trips.total_count,
       page: trips.current_page,
       per_page: trips.limit_value

@@ -10,6 +10,12 @@ class Trip < ApplicationRecord
 
   validates :user, :title, :description, :trip_type, presence: true
 
+  scope :most_popular, -> { 
+    joins(:bookings)
+    .group("trips.id")
+    .order('count(bookings.id) DESC NULLS LAST')
+  }
+
   ####### Trip types
   # 0 - Private Trip request (default)
   # 1 - Public Trip request 
