@@ -1,4 +1,5 @@
 class Trip < ApplicationRecord
+  include Reviewable
   belongs_to :user
   belongs_to :city, required: false
   
@@ -6,9 +7,14 @@ class Trip < ApplicationRecord
   has_one :country, through: :city 
   has_many :bookings
   has_many :users, through: :bookings
-  has_many :reviews, as: :object
 
   validates :user, :title, :description, :trip_type, presence: true
+
+  scope :most_popular, -> { 
+    joins(:bookings)
+    .group("trips.id")
+    .order('count(bookings.id) DESC NULLS LAST')
+  }
 
   ####### Trip types
   # 0 - Private Trip request (default)

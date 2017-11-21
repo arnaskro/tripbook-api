@@ -19,6 +19,18 @@ class V1::LocalsController < ApiController
     locals = locals.where(city_id: params[:city_id]) if params[:city_id]
     # Filter by availability
     locals = locals.where(available: true) if params[:available]
+
+    # (optional) if sort params was provided
+    if params[:sort]
+      
+      case params[:sort].downcase
+      when 'popularity' # by number of bookings
+        locals = locals.most_popular
+      when 'rating' # by rating of reviews
+        locals = locals.best_rated
+      end
+
+    end
     
     # Paginate
     locals = locals.page(page).per(per_page)

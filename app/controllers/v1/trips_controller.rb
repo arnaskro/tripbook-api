@@ -10,11 +10,22 @@ class V1::TripsController < ApiController
     trips = trips.joins(:city).where("cities.id = ?", params[:city_id]) if params[:city_id]
     # (optional) if country_id params was provided
     trips = trips.joins(:city => :country).where("countries.id = ?", params[:country_id]) if params[:country_id]
+    # (optional) if sort params was provided
+    if params[:sort]
+      
+      case params[:sort].downcase
+      when 'popularity' # by number of bookings
+        trips = trips.most_popular
+      when 'rating' # by rating of reviews
+        trips = trips.best_rated
+      end
+
+    end
     # Paginate
     trips = trips.page(params[:page] || 1).per(params[:per_page] || 20)
 
     render json: {
-      trips: trips,
+      trips: ActiveModelSerializers::SerializableResource.new(trips, each_serializer: TripSerializer),
       total: trips.total_count,
       page: trips.current_page,
       per_page: trips.limit_value
