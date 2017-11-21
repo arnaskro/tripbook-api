@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
 
-  attribute :has_local, :local_id
+  attributes :has_local, :local_id
 
   def self.search(query, quantity = nil, fields = ["name", "lastname", "email"])
     super(query, quantity, fields)
