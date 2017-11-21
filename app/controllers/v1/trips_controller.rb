@@ -1,5 +1,5 @@
 class V1::TripsController < ApiController
-  before_action :authenticate_v1_user!, only: [:create, :update, :destroy]
+  before_action :authenticate_v1_user!, only: [:get_trips, :create, :update, :destroy]
   before_action :get_trip, only: [:show, :update, :destroy]
 
   # [GET] Trips (city_id, country_id, trip_type)
@@ -21,7 +21,26 @@ class V1::TripsController < ApiController
       end
 
     end
+
     # Paginate
+    trips = trips.page(params[:page] || 1).per(params[:per_page] || 20)
+
+    render json: {
+      trips: ActiveModelSerializers::SerializableResource.new(trips, each_serializer: TripSerializer),
+      total: trips.total_count,
+      page: trips.current_page,
+      per_page: trips.limit_value
+    }
+  end
+
+  def get_trips
+    # Get trip offers created by the user
+    if params[:public]
+      trips = Trip.where(trip_type: 1, city_id: params[:city_id])
+    else
+      trips = current_v1_user.trips.where(trip_type: 2)
+    end
+    
     trips = trips.page(params[:page] || 1).per(params[:per_page] || 20)
 
     render json: {

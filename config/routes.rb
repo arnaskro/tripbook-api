@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     # Locals
     resources :locals, only: [:index, :show, :create, :update, :destroy]
     # Trips
+    get 'trips/public' => 'trips#get_trips', public: true
+    get 'trips/private' => 'trips#get_trips', public: false
     resources :trips, only: [:index, :show, :create, :update, :destroy]
     # Bookings
     post 'bookings/:id/:new_status' => 'bookings#update'
