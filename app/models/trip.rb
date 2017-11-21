@@ -1,4 +1,5 @@
 class Trip < ApplicationRecord
+  include Reviewable
   belongs_to :user
   belongs_to :city, required: false
   
@@ -6,7 +7,6 @@ class Trip < ApplicationRecord
   has_one :country, through: :city 
   has_many :bookings
   has_many :users, through: :bookings
-  has_many :reviews, as: :object
 
   validates :user, :title, :description, :trip_type, presence: true
 

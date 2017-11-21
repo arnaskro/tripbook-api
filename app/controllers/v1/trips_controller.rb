@@ -10,6 +10,23 @@ class V1::TripsController < ApiController
     trips = trips.joins(:city).where("cities.id = ?", params[:city_id]) if params[:city_id]
     # (optional) if country_id params was provided
     trips = trips.joins(:city => :country).where("countries.id = ?", params[:country_id]) if params[:country_id]
+    # (optional) if sort params was provided
+    if params[:sort]
+      
+      case params[:sort].downcase
+      when 'popularity' # by number of bookings
+        trips = trips
+                .joins(:bookings)
+                .group('trips.id')
+                .order('count(bookings.id) DESC NULLS LAST')
+      when 'rating' # by rating of reviews
+        trips = trips
+                .joins(:reviews)
+                .group('trips.id')
+                .order('count(reviews.id) DESC NULLS LAST')
+      end
+
+    end
     # Paginate
     trips = trips.page(params[:page] || 1).per(params[:per_page] || 20)
 
