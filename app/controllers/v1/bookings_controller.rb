@@ -94,8 +94,7 @@ class V1::BookingsController < ApiController
     case params[:new_status].downcase
     when "accept"
       new_status = 2
-    when "deny"
-    when "cancel"
+    when "cancel", "deny"
       new_status = 0
     else
       new_status = 1

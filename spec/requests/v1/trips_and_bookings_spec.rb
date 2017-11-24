@@ -171,36 +171,66 @@ describe 'Trips & Bookings Module' do
         expect(booking.status).to eq(1) #Pending
       end
     end
-
-    describe 'Local accepts booking' do
-      it 'saves correct status for the local and the user' do
-        trip = Trip.create(
-          number_of_people: 5,
-          title: "Random title",
-          description: "A Random description that is or at least should be longer than around 100 characters. Some additional text to make the text even longer.",
-          user: @local.user,
-          from_date: Date.today - 1.month,
-          to_date: Date.today + 2.months,
-          trip_type: 2,
-          city: @local.city)
-
-        booking = Booking.create(
-          trip: trip,
-          number_of_people: 3,
-          user: @user,
-          local: @local,
-          status: 1,
-          from_date: Date.today + 2.days,
-          to_date: Date.today + 10.days
-        )
+    
+        describe 'Local accepts booking' do
+          it 'saves correct status for the local and the user' do
+            trip = Trip.create(
+              number_of_people: 5,
+              title: "Random title",
+              description: "A Random description that is or at least should be longer than around 100 characters. Some additional text to make the text even longer.",
+              user: @local.user,
+              from_date: Date.today - 1.month,
+              to_date: Date.today + 2.months,
+              trip_type: 2,
+              city: @local.city)
+    
+            booking = Booking.create(
+              trip: trip,
+              number_of_people: 3,
+              user: @user,
+              local: @local,
+              status: 1,
+              from_date: Date.today + 2.days,
+              to_date: Date.today + 10.days
+            )
+            
+            post "/v1/bookings/#{booking.id}/accept", headers: @local.user.create_new_auth_token
+            
+            # Expectations
+            expect(response.status).to eq(200)
+            expect(Booking.find(booking.id).status).to eq(2)
+          end
+        end
         
-        post "/v1/bookings/#{booking.id}/accept", headers: @local.user.create_new_auth_token
-        
-        # Expectations
-        expect(response.status).to eq(200)
-        expect(Booking.find(booking.id).status).to eq(2)
-      end
-    end
+        describe 'Local cancels booking' do
+          it 'saves correct status for the local and the user' do
+            trip = Trip.create(
+              number_of_people: 5,
+              title: "Random title",
+              description: "A Random description that is or at least should be longer than around 100 characters. Some additional text to make the text even longer.",
+              user: @local.user,
+              from_date: Date.today - 1.month,
+              to_date: Date.today + 2.months,
+              trip_type: 2,
+              city: @local.city)
+    
+            booking = Booking.create(
+              trip: trip,
+              number_of_people: 3,
+              user: @user,
+              local: @local,
+              status: 1,
+              from_date: Date.today + 2.days,
+              to_date: Date.today + 10.days
+            )
+            
+            post "/v1/bookings/#{booking.id}/cancel", headers: @local.user.create_new_auth_token
+            
+            # Expectations
+            expect(response.status).to eq(200)
+            expect(Booking.find(booking.id).status).to eq(0)
+          end
+        end
   end
 
   describe "Get" do
