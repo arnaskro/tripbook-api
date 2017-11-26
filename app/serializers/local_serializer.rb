@@ -1,8 +1,12 @@
 class LocalSerializer < ActiveModel::Serializer
-  attributes :id, :available, :description, :quote, :active, :city_id
+  attributes :id, :available, :description, :quote, :active
 
   attribute :user do
     SimpleUserSerializer.new(object.user)
+  end
+
+  attribute :city do
+    CitySerializer.new(object.city)
   end
 
   attribute :review_count do
