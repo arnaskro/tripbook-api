@@ -20,6 +20,9 @@ class User < ActiveRecord::Base
   has_many :conversation_participants
   has_many :conversations, through: :conversation_participants
 
+  
+  validates_uniqueness_of :email
+
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
 
