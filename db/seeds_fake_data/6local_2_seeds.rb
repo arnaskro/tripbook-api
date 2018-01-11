@@ -999,7 +999,7 @@ locallist = [{"user_id":2501,"available":false,"quote":"Persistent even-keeled d
 {"user_id":3499,"available":false,"quote":"Pre-emptive zero defect forecast","description":"quisque id justo sit amet sapien dignissim vestibulum vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae nulla dapibus dolor vel est donec odio justo sollicitudin ut suscipit a feugiat et eros vestibulum ac est lacinia nisi venenatis tristique fusce congue diam id ornare imperdiet sapien urna pretium nisl ut volutpat sapien","city_id":85085},
 {"user_id":3500,"available":true,"quote":"Adaptive empowering internet solution","description":"platea dictumst aliquam augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit lacinia erat vestibulum sed magna at nunc commodo placerat praesent blandit nam nulla integer pede justo lacinia eget tincidunt eget tempus vel pede morbi porttitor lorem id ligula suspendisse ornare consequat lectus in est risus auctor sed tristique in tempus sit amet sem fusce consequat nulla nisl nunc nisl duis bibendum felis sed interdum venenatis turpis enim blandit mi in porttitor pede","city_id":88351}]
 
-freeuserlist = User.all.select{|x|!x.has_local}.pluck[:id]
+freeuserlist = User.all.select{|x|!x.has_local}.pluck(:id)
 
 locallist.each do |x|
     x["user_id"] = freeuserlist.pop()

@@ -999,7 +999,7 @@
 {"user_id":3499,"available":false,"quote":"Horizontal value-added implementation","description":"consectetuer adipiscing elit proin interdum mauris non ligula pellentesque ultrices phasellus id sapien in sapien iaculis congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut","city_id":107700},
 {"user_id":3500,"available":false,"quote":"Re-engineered contextually-based hierarchy","description":"est congue elementum in hac habitasse platea dictumst morbi vestibulum velit id pretium iaculis diam erat fermentum justo nec condimentum neque sapien placerat ante nulla justo aliquam quis turpis eget elit sodales scelerisque mauris sit amet eros suspendisse accumsan tortor quis turpis sed ante vivamus tortor duis mattis egestas metus aenean fermentum donec","city_id":85406}]
 
-freeuserlist = User.all.select{|x|!x.has_local}.pluck[:id]
+freeuserlist = User.all.select{|x|!x.has_local}.pluck(:id)
 
 locallist.each do |x|
     x["user_id"] = freeuserlist.pop()
